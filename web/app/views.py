@@ -6,6 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app.login import User
 import os
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -63,6 +64,7 @@ def signup():
 @app.route('/dashboard/<user>')
 def dashboard (user):
     profile = mongo.db.users.find_one({'email' : current_user.email })
+
     return render_template('dashboard.html', user=user, profile = dict(profile))
 
 
