@@ -6,6 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app.login import User
 import os
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -63,7 +64,10 @@ def signup():
 @app.route('/dashboard/<user>')
 def dashboard (user):
     profile = mongo.db.users.find_one({'email' : current_user.email })
-    moods = { 'happy' : 40, 'content' :70, 'anger' : 20 }
+    moods = dict(mongo.db.emotions.find_one({'screen_name' : dict(profile)['twitter_handle']}))
+    for k, v in moods.items():
+        if type(v) is float:
+            moods[k] = float (v) * 100     
     return render_template('dashboard.html', user=user, profile = dict(profile), moods = moods)
 
 

@@ -14,22 +14,34 @@
                     <p class="font-medium"> Current Mood </p>
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"
-                            style="width:{{ moods.content }}%">
+                            style="width:{{ moods.disgust }}%">
                             <span class="sr-only">70% Complete</span>
                         </div>
                     </div>
                     <div class="progress">
                         <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="70"
-                            aria-valuemin="0" aria-valuemax="100" style="width:{{ moods.anger }}%">
+                            aria-valuemin="0" aria-valuemax="100" style="width:{{ moods.joy }}%">
                             <span class="sr-only">70% Complete</span>
                         </div>
                     </div>
                     <div class="progress">
                         <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="70"
-                            aria-valuemin="0" aria-valuemax="100" style="width:{{ moods.happy }}%">
+                            aria-valuemin="0" aria-valuemax="100" style="width:{{ moods.anger }}%">
                             <span class="sr-only">70% Complete</span>
                         </div>
                     </div>
+                    <div class="progress">
+                            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="70"
+                                aria-valuemin="0" aria-valuemax="100" style="width:{{ moods.sadness }}%">
+                                <span class="sr-only">70% Complete</span>
+                            </div>
+                        </div>
+                        <div class="progress">
+                                <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="70"
+                                    aria-valuemin="0" aria-valuemax="100" style="width:{{ moods.fear }}%">
+                                    <span class="sr-only">70% Complete</span>
+                                </div>
+                            </div>
                 </div>
             </div>
 
@@ -42,6 +54,10 @@
                 People are looking at your profile. Find out who.
             </div>
 
+    </div>
+    <div class="col-sm-9">
+        <div class="dash-header text-left">
+            <h5>Suggestions </h5>
         </div>
         <div class="col-sm-9">
             <div class="dash-header text-left">
