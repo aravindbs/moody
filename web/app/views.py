@@ -50,15 +50,26 @@ def signup():
             flash("Username Exists, Try Again")
             print ('here')
             return redirect ( url_for('signup'))
-
         else :
             mongo.db.users.insert_one(form_data)
             user = User (mongo.db.users.find_one({'username' : form_data['username']}) )
             login_user(user)
-            return redirect (url_for('dashboard', user=current_user.username))
+            return redirect (url_for('preferences', user=current_user.username))
 
         print (json.dumps (form_data, indent=3))
     return render_template('signup.html')
+
+@app.route('/preferences', methods= ['GET','POST'])
+def preferences(): 
+    if request.method == 'POST':
+        form_data = request.form.to_dict()
+        print (form_data)
+        
+        return redirect (url_for('dashboard', user=current_user.username))
+    else : 
+        return render_template('preferences.html')
+
+
 
 @login_required
 @app.route('/dashboard/<user>')
