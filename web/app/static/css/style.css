@@ -67,6 +67,17 @@ label, button{
 
 }
 
+.font-medium{
+    font-family:  Ubuntu-B;
+    color: white;
+
+}
+.font-lightitalic{
+    font-family:  Ubuntu-LI;
+    color: white;
+
+}
+
 .dash-header{
     background-color: #222 !important;
     padding: 2px 10px 2px;
@@ -85,6 +96,20 @@ label, button{
     background-color: #222 !important;
 
 }
+
+.progress {
+  
+    height: 5px;
+    margin: 9%;
+    line-height: 10px;
+}
+
+.mood-icon{
+    height: 5px;
+    margin: 5%;
+    line-height: 10px;
+    float: left;
+  }
 
 @font-face { font-family: Ubuntu-M ;  src: url(../fonts/Ubuntu-M.ttf); }
 @font-face { font-family: Ubuntu-MI ;  src: url(../fonts/Ubuntu-MI.ttf); }

@@ -1,48 +1,73 @@
 {% extends "base.html" %} {% block body %}
 <div class="container-fluid text-center main-body">
     <div class="row content text-center">
-    </div>
 
-    <div class="col-sm-3">
-        <div class="well">
-            <img src="https://avatars.io/avatar/HASH/size" class="img-circle" height="65" width="65" alt="Avatar">
-            <h3 class="semi-bold-black">{{ profile.first_name }} {{ profile.last_name }}</h3>
+        <div class="col-sm-3">
+            <div class="well">
+                <img src="https://avatars.io/avatar/HASH/size" class="img-circle" height="65" width="65" alt="Avatar">
+                <h3 class="semi-bold-black">{{ profile.first_name }} {{ profile.last_name }}</h3>
+                <p class="font-lightitalic">@{{ profile.username }}</p>
+
+            </div>
+            <div class="well">
+                <div class="moods">
+                    <p class="font-medium"> Current Mood </p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"
+                            style="width:{{ moods.content }}%">
+                            <span class="sr-only">70% Complete</span>
+                        </div>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="70"
+                            aria-valuemin="0" aria-valuemax="100" style="width:{{ moods.anger }}%">
+                            <span class="sr-only">70% Complete</span>
+                        </div>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="70"
+                            aria-valuemin="0" aria-valuemax="100" style="width:{{ moods.happy }}%">
+                            <span class="sr-only">70% Complete</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="alert alert-success fade in">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+                <p>
+                    <strong>Ey!</strong>
+                </p>
+                People are looking at your profile. Find out who.
+            </div>
+
         </div>
-       
-        <div class="alert alert-success fade in">
-            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-            <p>
-                <strong>Ey!</strong>
-            </p>
-            People are looking at your profile. Find out who.
+        <div class="col-sm-9">
+            <div class="dash-header text-left">
+                <h5> Recent Moods</h5>
+            </div>
+            <div class="dash-body">
+            </div>
+
         </div>
-    
-    </div>
-    <div class="col-sm-9">
-        <div class="dash-header text-left">
-            <h5> Recent Moods</h5>
+        <div class="col-sm-9">
+            <div class="dash-header text-left">
+                <h5>Suggesstions </h5>
+            </div>
+            <div class="dash-body">
+            </div>
+
         </div>
-        <div class="dash-body">
+        <div class="col-sm-12">
+            <div class="dash-header text-left">
+                <h5> Your Activites</h5>
+            </div>
+            <div class="dash-body">
+            </div>
+
         </div>
 
     </div>
-    <div class="col-sm-9">
-        <div class="dash-header text-left">
-            <h5>Suggesstions </h5>
-        </div>
-        <div class="dash-body">
-        </div>
-
-    </div>
-    <div class="col-sm-12">
-        <div class="dash-header text-left">
-            <h5> Your Activites</h5>
-        </div>
-        <div class="dash-body">
-        </div>
-
-    </div>
-
-</div>
 </div>
 {% endblock %}

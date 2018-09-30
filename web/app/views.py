@@ -63,7 +63,8 @@ def signup():
 @app.route('/dashboard/<user>')
 def dashboard (user):
     profile = mongo.db.users.find_one({'email' : current_user.email })
-    return render_template('dashboard.html', user=user, profile = dict(profile))
+    moods = { 'happy' : 40, 'content' :70, 'anger' : 20 }
+    return render_template('dashboard.html', user=user, profile = dict(profile), moods = moods)
 
 
 
