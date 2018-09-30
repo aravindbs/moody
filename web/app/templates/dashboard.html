@@ -1,0 +1,48 @@
+{% extends "base.html" %} {% block body %}
+<div class="container-fluid text-center main-body">
+    <div class="row content text-center">
+    </div>
+
+    <div class="col-sm-3">
+        <div class="well">
+            <img src="https://avatars.io/avatar/HASH/size" class="img-circle" height="65" width="65" alt="Avatar">
+            <h3 class="semi-bold-black">{{ profile.first_name }} {{ profile.last_name }}</h3>
+        </div>
+       
+        <div class="alert alert-success fade in">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+            <p>
+                <strong>Ey!</strong>
+            </p>
+            People are looking at your profile. Find out who.
+        </div>
+    
+    </div>
+    <div class="col-sm-9">
+        <div class="dash-header text-left">
+            <h5> Recent Moods</h5>
+        </div>
+        <div class="dash-body">
+        </div>
+
+    </div>
+    <div class="col-sm-9">
+        <div class="dash-header text-left">
+            <h5>Suggesstions </h5>
+        </div>
+        <div class="dash-body">
+        </div>
+
+    </div>
+    <div class="col-sm-12">
+        <div class="dash-header text-left">
+            <h5> Your Activites</h5>
+        </div>
+        <div class="dash-body">
+        </div>
+
+    </div>
+
+</div>
+</div>
+{% endblock %}

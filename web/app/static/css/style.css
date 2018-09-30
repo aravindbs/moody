@@ -1,0 +1,97 @@
+
+
+.bg { 
+    /* The image used */
+    background-image: url("../img/bg.jpg");
+
+    /* Full height */
+    height: 100%; 
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.main-body {
+    min-height: 75%;
+}
+#footer {
+    position: fixed ;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background:  #222;;
+    color: white;
+    text-align: center;
+}
+
+#form-body {
+    padding: 2%;
+    overflow:hidden;
+    background-color: lightgray !important;
+    border-radius: 5px;
+    margin: 0%;
+}
+
+#form-title {
+    background-color: #222 !important;
+    padding: 2%;
+    margin: 0%;
+    border-radius: 5px;
+}
+#form-container {
+    border-radius: 5px;
+}
+
+h1 ,h2,h3,h4, h5{
+    font-family:  Ubuntu-B;
+    color: white;
+}
+a,p, input, li{
+    font-family:  Ubuntu-R;
+    font : Ubuntu-R;
+    color: white;
+
+}
+
+label, button{
+    font-family:  Ubuntu-R;
+    color: black;
+
+}
+
+.semi-bold-black{
+    font-family:  Ubuntu-M;
+    color: white;
+
+}
+
+.dash-header{
+    background-color: #222 !important;
+    padding: 2px 10px 2px;
+    margin-top: 0%;
+    border-radius: 5px;
+}
+.dash-body {
+    min-height: 30%;
+    background-color: lightgray !important;
+    margin-bottom: 10px;
+    padding: 2%;
+    border-radius: 5px;
+}
+
+.well {
+    background-color: #222 !important;
+
+}
+
+@font-face { font-family: Ubuntu-M ;  src: url(../fonts/Ubuntu-M.ttf); }
+@font-face { font-family: Ubuntu-MI ;  src: url(../fonts/Ubuntu-MI.ttf); }
+@font-face { font-family: Ubuntu-L ;  src: url(../fonts/Ubuntu-L.ttf); }
+@font-face { font-family: Ubuntu-B ;  src: url(../fonts/Ubuntu-B.ttf); }
+@font-face { font-family: Ubuntu-BI ;  src: url(../fonts/Ubuntu-BI.ttf); }
+@font-face { font-family: Ubuntu-R ;  src: url(../fonts/Ubuntu-R.ttf); }
+@font-face { font-family: Ubuntu-C ;  src: url(../fonts/Ubuntu-C.ttf); }
+@font-face { font-family: Ubuntu-RI ;  src: url(../fonts/Ubuntu-RI.ttf); }
+@font-face { font-family: Ubuntu-LI ;  src: url(../fonts/Ubuntu-LI.ttf); }
