@@ -20,3 +20,5 @@ login_manager.login_view = "login"
 mongo = PyMongo(app)
 print ( config)
 from app import views
+
+

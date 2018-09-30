@@ -75,8 +75,11 @@ def preferences():
 @app.route('/dashboard/<user>')
 def dashboard (user):
     profile = mongo.db.users.find_one({'email' : current_user.email })
-
-    return render_template('dashboard.html', user=user, profile = dict(profile))
+    moods = dict(mongo.db.emotions.find_one({'screen_name' : dict(profile)['twitter_handle']}))
+    for k, v in moods.items():
+        if type(v) is float:
+            moods[k] = float (v) * 100     
+    return render_template('dashboard.html', user=user, profile = dict(profile), moods = moods)
 
 
 
