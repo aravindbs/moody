@@ -5,9 +5,9 @@ from flask_login import login_user, login_required,current_user, logout_user,log
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.login import User
 import os
+from utils import get_prefs
 
-LANGS = ['Tamil', 'Kannada', 'English', 'C++', 'Python']
-ARTISTS = ['Drake', 'Khalid', 'Eminem', 'Stroutsoup', 'vanRossum']
+GENRES = ['']
 
 @app.route('/')
 def index():
@@ -66,19 +66,25 @@ def preferences():
     if request.method == 'POST':
         artists = request.form.getlist('artists')
         langs = request.form.getlist('langs')
-        update = { 'username' : current_user.username, 'langs' : langs, 'artists' : artists }
+        genres = request.form.getlist('genres')
+        update = { 'username' : current_user.username, 'langs' : langs, 'artists' : artists, 'genres' : genres }
         mongo.db.preferences.update ( query, update, upsert =True)
         flash ('Preferences Updated')
         return redirect (url_for('dashboard', user=current_user.username))
 
     preferences = mongo.db.preferences.find_one(query)
+    pref_list = get_prefs()
     langs_values =[]
     artists_values = []
+    genres_values = []
     if preferences:
-        
-        langs_values = preferences['langs']
-        artists_values = preferences['artists']
-    return render_template('preferences.html', langs = LANGS, artists = ARTISTS, langs_values =langs_values , artists_values = artists_values)
+        try:
+            genres_values = preferences['genres']
+            langs_values = preferences['langs']
+            artists_values = preferences['artists']
+        except KeyError:
+            pass
+    return render_template('preferences.html', pref_list = pref_list, genres_values = genres_values, langs_values =langs_values , artists_values = artists_values)
 
 @login_required
 @app.route('/dashboard/<user>')
