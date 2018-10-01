@@ -5,7 +5,7 @@ from flask_login import login_user, login_required,current_user, logout_user,log
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.login import User
 import os
-from utils import get_prefs
+from utils import get_prefs, get_suggestions
 
 GENRES = ['']
 
@@ -95,8 +95,10 @@ def dashboard (user):
         for k, v in dict(moods).items():
             if type(v) is float:
                 moods[k] = float (v) * 100     
-    tracks = [ 'https://open.spotify.com/embed/track/73TXMz1i41sGfOuDg8gH4L', 'https://open.spotify.com/embed/track/6ZANrVuAMp2rpjhfbOuJly', 'https://open.spotify.com/embed/track/73TXMz1i41sGfOuDg8gH4L', 'https://open.spotify.com/embed/track/73TXMz1i41sGfOuDg8gH4L']
-    return render_template('dashboard.html', title = 'Moody | {}'.format(profile['first_name']), user=user, profile = dict(profile), moods = moods, tracks = tracks)
+    suggestions = get_suggestions(current_user.username)
+    suggestions['video'].append('https://www.youtube.com/embed/09dhcI_pCMk')
+   # suggestions['video'].append('https://www.youtube.com/watch?v=09dhcI_pCMk')
+    return render_template('dashboard.html', title = 'Moody | {}'.format(profile['first_name']), user=user, profile = dict(profile), moods = moods, suggestions=suggestions)
 
 
 

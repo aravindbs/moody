@@ -63,7 +63,7 @@
                     <h5> Music Suggesstions </h5>
                 </div>
                 <div class="dash-body">
-                    {% for track in tracks %}
+                    {% for track in suggestions.music %}
                     <div class="col-sm-12 spotify-track">
                         <iframe src="{{ track }}" width="100%" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
                     </div>
@@ -72,16 +72,39 @@
             </div>
             <div class="col-sm-12 dash-element">
                 <div class="dash-header text-left">
-                    <h5> Video Activites</h5>
+                    <h5> Video Suggesstions</h5>
                 </div>
-                <div class="dash-body">
-                        <div class="col-sm-12 spotify-track">
-                        <iframe width="100%" height="150" src="https://www.youtube.com/embed/lJIrF4YjHfQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                <div class="dash-body-video">
+                    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                        <!-- Indicators -->
+                        <ol class="carousel-indicators">
+                            {% for video in suggestions.video %}
+                            <li data-target="#myCarousel" data-slide-to="{{ loop.index - 1 }}" {% if loop.counter == 1 %}class="active"{% endif %}></li>
+                            {% endfor %}
+                        </ol>
+
+                        <!-- Wrapper for slides -->
+                        <div class="carousel-inner">
+                            {% for video in suggestions.video %}
+                            <div class="item {% if loop.index == 1 %}active{% endif %}">
+
+                                <iframe width="100%" height="100%" src="{{ video }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                            </div>
+                            {% endfor %}
                         </div>
+                        <!-- Left and right controls -->
+                        <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                            <span class="glyphicon glyphicon-chevron-left"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
                 </div>
 
             </div>
-
         </div>
     </div>
 </div>

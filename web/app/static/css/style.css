@@ -1,7 +1,6 @@
 
-
-.bg { 
-    /* The image used */
+body {
+    padding-bottom:60px;
     background-image: url("../img/bg.jpg");
 
     /* Full height */
@@ -12,19 +11,37 @@
     background-repeat: no-repeat;
     background-size: cover;
 }
+html {
+    height: 100%;
+}
+.bg { 
+    /* The image used */
+    
+}
 
 .main-body {
-    min-height: 75%;
+    min-height: 0%;
 }
 #footer {
-    position: fixed ;
-    left: 0;
-    bottom: 0;
-    width: 100%;
+     width:100%;
     background:  #222;;
     color: white;
     text-align: center;
+ 
 }
+.page-wrap {
+    min-height: 100%;
+    /* equal to footer height */
+    margin-bottom: -142px; 
+  }
+  .page-wrap:after {
+    content: "";
+    display: block;
+  }
+  .site-footer, .page-wrap:after {
+    height: 142px; 
+  }
+
 
 #form-body {
     padding: 2%;
@@ -92,6 +109,13 @@ label, button{
     border-radius: 5px;
     overflow: scroll;
 }
+.dash-body-video {
+    height: 40%;
+    background-color: lightgray !important;
+    margin-bottom: 10px;
+    padding: 0%;
+    border-radius: 5px;
+}
 .dash-element {
    
     padding: 0%;
@@ -119,6 +143,11 @@ label, button{
 
 .spotify-track {
     padding: 0%;
+}
+
+.checkbox {
+    max-height: 30%;
+    overflow: scroll;
 }
 
 
