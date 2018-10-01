@@ -5,7 +5,9 @@ from flask_login import login_user, login_required,current_user, logout_user,log
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.login import User
 import os
+from utils import get_prefs
 
+GENRES = ['']
 
 @app.route('/')
 def index():
@@ -54,24 +56,35 @@ def signup():
             mongo.db.users.insert_one(form_data)
             user = User (mongo.db.users.find_one({'username' : form_data['username']}) )
             login_user(user)
-            return redirect (url_for('preferences', user=current_user.username))
-
-        print (json.dumps (form_data, indent=3))
+            return redirect (url_for('preferences', user=current_user.username))  
     return render_template('signup.html')
 
+@login_required
 @app.route('/preferences', methods= ['GET','POST'])
 def preferences(): 
-    LANGS = ['Tamil', 'Kannada', 'English', 'Telugu' 'Malayalam']
-    ARTISTS = ['Drake', 'Khalid', 'Eminem', 'Sia', 'Ed Sheeran']
+    query = { 'username' : current_user.username }
     if request.method == 'POST':
         artists = request.form.getlist('artists')
         langs = request.form.getlist('langs')
-        query = { 'username' : current_user.username, 'langs' : langs, 'artists' : artists }
-        mongo.db.preferences.insert_one(query)
+        genres = request.form.getlist('genres')
+        update = { 'username' : current_user.username, 'langs' : langs, 'artists' : artists, 'genres' : genres }
+        mongo.db.preferences.update ( query, update, upsert =True)
+        flash ('Preferences Updated')
         return redirect (url_for('dashboard', user=current_user.username))
-    return render_template('preferences.html', langs = LANGS, artists = ARTISTS)
 
-
+    preferences = mongo.db.preferences.find_one(query)
+    pref_list = get_prefs()
+    langs_values =[]
+    artists_values = []
+    genres_values = []
+    if preferences:
+        try:
+            genres_values = preferences['genres']
+            langs_values = preferences['langs']
+            artists_values = preferences['artists']
+        except KeyError:
+            pass
+    return render_template('preferences.html', pref_list = pref_list, genres_values = genres_values, langs_values =langs_values , artists_values = artists_values)
 
 @login_required
 @app.route('/dashboard/<user>')

@@ -48,10 +48,15 @@
 
             <div class="alert alert-success fade in">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-                <p>
-                    <strong>Ey!</strong>
-                </p>
-                People are looking at your profile. Find out who.
+                {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div id="form-title">
+               
+                    {% for message in messages %}
+                    <p>{{ message }}</p> <br>
+                    {% endfor %}
+                </div>
+                    {% endif %} {% endwith %}
             </div>
 
         </div>
