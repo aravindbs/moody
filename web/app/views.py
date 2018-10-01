@@ -6,6 +6,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app.login import User
 import os
 
+LANGS = ['Tamil', 'Kannada', 'English', 'C++', 'Python']
+ARTISTS = ['Drake', 'Khalid', 'Eminem', 'Stroutsoup', 'vanRossum']
 
 @app.route('/')
 def index():
@@ -59,19 +61,27 @@ def signup():
         print (json.dumps (form_data, indent=3))
     return render_template('signup.html')
 
+@login_required
 @app.route('/preferences', methods= ['GET','POST'])
 def preferences(): 
-    LANGS = ['Tamil', 'Kannada', 'English', 'C++', 'Python']
-    ARTISTS = ['Drake', 'Khalid', 'Eminem', 'Stroutsoup', 'vanRossum']
+    query = { 'username' : current_user.username }
     if request.method == 'POST':
         artists = request.form.getlist('artists')
         langs = request.form.getlist('langs')
-        query = { 'username' : current_user.username, 'langs' : langs, 'artists' : artists }
-        mongo.db.preferences.insert_one(query)
+        update = { 'username' : current_user.username, 'langs' : langs, 'artists' : artists }
+        mongo.db.preferences.update ( query, update, upsert =True)
+        flash ('Preferences Updated')
         return redirect (url_for('dashboard', user=current_user.username))
-    return render_template('preferences.html', langs = LANGS, artists = ARTISTS)
 
-
+    preferences = mongo.db.preferences.find_one(query)
+    langs_values =[]
+    artists_values = []
+    if preferences:
+        
+        langs_values = preferences['langs']
+        artists_values = preferences['artists']
+    print(langs_values)
+    return render_template('preferences.html', langs = LANGS, artists = ARTISTS, langs_values =langs_values , artists_values = artists_values)
 
 @login_required
 @app.route('/dashboard/<user>')

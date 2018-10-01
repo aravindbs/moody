@@ -29,7 +29,7 @@
                 <ul class="nav navbar-nav">
                     {% if current_user.is_authenticated %}
                     <li class="active">
-                        <a href="{{ url_for('dashboard', user=current_user.username) }}">Home</a>
+                        <a href="{{ url_for('dashboard', user=current_user.username) }}"> <span class="glyphicon glyphicon-home"></span> Home</a>
                     </li>
                     {% else %}
                     <li class="active">
@@ -41,9 +41,15 @@
                 <ul class="nav navbar-nav navbar-right">
                         {% if current_user.is_authenticated %}
                         <li>
+                                <a href="{{ url_for('preferences') }}">
+                                        <span class="glyphicon glyphicon-edit"></span> Edit Preferences</a>
+
+                        </li>
+                        <li>
                                 <a href="{{ url_for('logout') }}">
                                     <span class="glyphicon glyphicon-log-out"></span> Logout</a>
                             </li>
+                            
                         {% else %}
                     <li>
                         <a href="{{ url_for('signup') }}">

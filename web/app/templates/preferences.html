@@ -11,7 +11,7 @@
                     <label class="control-label col-sm-2" for="artists">Music Artists:</label>
                     <div class="col-sm-10">
                         {% for artist in artists %}
-                        <label class="checkbox-inline"><input type="checkbox" name="artists" value="{{ artist }}">{{
+                        <label class="checkbox-inline"><input type="checkbox" name="artists" value="{{ artist }}" {% if artist in artists_vlaues %} checked {% endif %}>{{
                             artist }}</label>
                         {% endfor %}
                     </div>
@@ -20,7 +20,7 @@
                     <label class="control-label col-sm-2" for="langs">Language Preference:</label>
                     <div class="col-sm-10">
                         {% for lang in langs %}
-                        <label class="checkbox-inline"><input type="checkbox" name="langs" value="{{ lang }}">{{ lang
+                        <label class="checkbox-inline"><input type="checkbox" name="langs" value="{{ lang }}" {% if lang in langs_vlaues %} checked {% endif %}>{{ lang
                             }}</label>
                         {% endfor %}
                     </div>
