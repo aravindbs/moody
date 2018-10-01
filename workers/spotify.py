@@ -3,11 +3,7 @@ import yaml
 import json
 import sys
 import pymongo
-with open("../config.yml", "r") as f:
-    config = yaml.load(f)
-
-myclient = pymongo.MongoClient(config['mongodb']['MONGO_URI'])
-db = myclient.testmoody
+from __init__ import config, db
 
 def get_token():
     url = 'https://accounts.spotify.com/api/token'
@@ -48,11 +44,11 @@ if __name__ == '__main__':
     emotions = list(db.emotions.find({}))
 
     artists = {}
-    langs = {}
+    
     genres = {}
     for pref in preferences: 
         artists[pref['username']] = pref['artists']
-        langs[pref['username']] = pref['langs']
+        #langs[pref['username']] = pref['langs']
         #genres[pref['username']] = pref['genres']
     
     access_token = get_token()
@@ -70,13 +66,14 @@ if __name__ == '__main__':
             'seed_artists' : ','.join(artist_ids), 
             #'seed_genres' : ','.join(user_genres),
             'limit' : '5',
-            'target_valence' : sadness if sadness > anger else 0.5 ,
-            'taget_energy' : sadness if sadness > anger else 0.2,
-            'target_instrumentalness' : 0.7 if anger > sadness else 0.3, #instrumental music in angry
-            'target_danceability': 0.2 if anger > sadness else 0.5,
+            'target_valence' : sadness if sadness > anger and sadness > 0.4 else 0.5 ,
+            'taget_energy' : sadness if sadness > anger and sadness > 0.4 else 0.2,
+            'target_instrumentalness' : 0.7 if anger > sadness and anger > 0.4 else 0.3, #instrumental music in angry
+            'target_danceability': 0.2 if anger > sadness and anger > 0.4 else 0.5,
             'min_popularity' : '50', 
             'market' : 'US'
         }
+
 
         url = 'https://api.spotify.com/v1/recommendations'
 
@@ -84,18 +81,22 @@ if __name__ == '__main__':
 
         r = requests.get(url, params=payload, headers=headers).json()
         tracks = r['tracks']
-        urls = []
-        names = []
+        suggest = {}
+        all_suggestions = []
         for track in tracks: 
-            print (track['external_urls']['spotify'])
-            urls.append(track['external_urls']['spotify'])
-            print (track['name'])
-            names.append(track['name'])
-
-
-
+            suggest['name'] = track['name']
+            url = track['external_urls']['spotify']
+            print(url)
+            index = url.find('/track') 
+            url = url[:index] + '/embed' + url[index:]
+            print(url)
+            suggest['url'] = url
+            suggest['artist'] = track['artists'][0]['name']
+            all_suggestions.append(suggest)
+            suggest = {}
         query = { 'username' : user['username'] }
-        update = { 'username' : user['username'] , 'urls' : urls, 'names' : names }
+        update = { 'username' : user['username'] , 'suggestion' : all_suggestions }
         db.music_suggestions.update(query, update, upsert=True)
+        
 
-
+ 
