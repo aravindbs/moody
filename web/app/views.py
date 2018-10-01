@@ -61,13 +61,15 @@ def signup():
 
 @app.route('/preferences', methods= ['GET','POST'])
 def preferences(): 
+    LANGS = ['Tamil', 'Kannada', 'English', 'C++', 'Python']
+    ARTISTS = ['Drake', 'Khalid', 'Eminem', 'Stroutsoup', 'vanRossum']
     if request.method == 'POST':
-        form_data = request.form.to_dict()
-        print (form_data)
-        
+        artists = request.form.getlist('artists')
+        langs = request.form.getlist('langs')
+        query = { 'username' : current_user.username, 'langs' : langs, 'artists' : artists }
+        mongo.db.preferences.insert_one(query)
         return redirect (url_for('dashboard', user=current_user.username))
-    else : 
-        return render_template('preferences.html')
+    return render_template('preferences.html', langs = LANGS, artists = ARTISTS)
 
 
 
@@ -75,10 +77,11 @@ def preferences():
 @app.route('/dashboard/<user>')
 def dashboard (user):
     profile = mongo.db.users.find_one({'email' : current_user.email })
-    moods = dict(mongo.db.emotions.find_one({'screen_name' : dict(profile)['twitter_handle']}))
-    for k, v in moods.items():
-        if type(v) is float:
-            moods[k] = float (v) * 100     
+    moods = mongo.db.emotions.find_one({'screen_name' : dict(profile)['twitter_handle']})
+    if moods:
+        for k, v in list(moods).items():
+            if type(v) is float:
+                moods[k] = float (v) * 100     
     return render_template('dashboard.html', user=user, profile = dict(profile), moods = moods)
 
 
