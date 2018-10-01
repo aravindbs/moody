@@ -5,7 +5,7 @@ from flask_login import login_user, login_required,current_user, logout_user,log
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.login import User
 import os
-from utils import get_prefs, get_suggestions
+from utils import get_prefs, get_suggestions, get_mood_colors, get_emoji
 
 GENRES = ['']
 
@@ -90,15 +90,19 @@ def preferences():
 @app.route('/dashboard/<user>')
 def dashboard (user):
     profile = mongo.db.users.find_one({'email' : current_user.email })
-    moods = mongo.db.emotions.find_one({'screen_name' : dict(profile)['twitter_handle']})
-    if moods:
-        for k, v in dict(moods).items():
+    emotions = mongo.db.emotions.find_one({'screen_name' : dict(profile)['twitter_handle']})
+    moods = {}
+    if emotions:
+        for k, v in dict(emotions).items():
             if type(v) is float:
                 moods[k] = float (v) * 100     
     suggestions = get_suggestions(current_user.username)
     suggestions['video'].append('https://www.youtube.com/embed/09dhcI_pCMk')
+    mood_color = get_mood_colors()
+    emoji = get_emoji()
+   # print (moods)
    # suggestions['video'].append('https://www.youtube.com/watch?v=09dhcI_pCMk')
-    return render_template('dashboard.html', title = 'Moody | {}'.format(profile['first_name']), user=user, profile = dict(profile), moods = moods, suggestions=suggestions)
+    return render_template('dashboard.html', title = 'Moody | {}'.format(profile['first_name']), user=user, profile = dict(profile), moods = moods, mood_color = mood_color, emoji = emoji ,suggestions=suggestions)
 
 
 

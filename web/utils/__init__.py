@@ -24,4 +24,11 @@ def get_suggestions (user):
         pass
     return suggestions
 
+def get_mood_colors ():
+    with open ('utils/mood_to_color.json', 'r') as f:
+        return json.load(f)
+    
+def get_emoji ():
+    with open ('utils/mood_to_emoji.json', 'r') as f:
+        return json.load(f)
 
