@@ -56,20 +56,13 @@ def signup():
             mongo.db.users.insert_one(form_data)
             user = User (mongo.db.users.find_one({'username' : form_data['username']}) )
             login_user(user)
-            return redirect (url_for('preferences', user=current_user.username))
-
-        print (json.dumps (form_data, indent=3))
+            return redirect (url_for('preferences', user=current_user.username))  
     return render_template('signup.html')
 
 @login_required
 @app.route('/preferences', methods= ['GET','POST'])
 def preferences(): 
-<<<<<<< HEAD
     query = { 'username' : current_user.username }
-=======
-    LANGS = ['Tamil', 'Kannada', 'English', 'Telugu' 'Malayalam']
-    ARTISTS = ['Drake', 'Khalid', 'Eminem', 'Sia', 'Ed Sheeran']
->>>>>>> fc7bd58a7e357e4010e26f022c8eaf04dffee3c1
     if request.method == 'POST':
         artists = request.form.getlist('artists')
         langs = request.form.getlist('langs')
@@ -85,7 +78,6 @@ def preferences():
         
         langs_values = preferences['langs']
         artists_values = preferences['artists']
-    print(langs_values)
     return render_template('preferences.html', langs = LANGS, artists = ARTISTS, langs_values =langs_values , artists_values = artists_values)
 
 @login_required
