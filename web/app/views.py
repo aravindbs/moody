@@ -64,7 +64,12 @@ def signup():
 @login_required
 @app.route('/preferences', methods= ['GET','POST'])
 def preferences(): 
+<<<<<<< HEAD
     query = { 'username' : current_user.username }
+=======
+    LANGS = ['Tamil', 'Kannada', 'English', 'Telugu' 'Malayalam']
+    ARTISTS = ['Drake', 'Khalid', 'Eminem', 'Sia', 'Ed Sheeran']
+>>>>>>> fc7bd58a7e357e4010e26f022c8eaf04dffee3c1
     if request.method == 'POST':
         artists = request.form.getlist('artists')
         langs = request.form.getlist('langs')
@@ -89,7 +94,7 @@ def dashboard (user):
     profile = mongo.db.users.find_one({'email' : current_user.email })
     moods = mongo.db.emotions.find_one({'screen_name' : dict(profile)['twitter_handle']})
     if moods:
-        for k, v in list(moods).items():
+        for k, v in dict(moods).items():
             if type(v) is float:
                 moods[k] = float (v) * 100     
     return render_template('dashboard.html', user=user, profile = dict(profile), moods = moods)
