@@ -5,13 +5,13 @@ from flask_login import login_user, login_required,current_user, logout_user,log
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.login import User
 import os
-from utils import get_prefs
+from utils import get_prefs, get_suggestions
 
 GENRES = ['']
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', title = 'Moody | Home')
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
@@ -32,7 +32,7 @@ def login():
         else:
             flash("Invalid Username. Try Again")
             return redirect (url_for('login'))
-    return render_template ('login.html')
+    return render_template ('login.html',  title = 'Moody | Login')
 
 @app.route('/logout')
 @login_required
@@ -57,7 +57,7 @@ def signup():
             user = User (mongo.db.users.find_one({'username' : form_data['username']}) )
             login_user(user)
             return redirect (url_for('preferences', user=current_user.username))  
-    return render_template('signup.html')
+    return render_template('signup.html',  title = 'Moody | Sign Up')
 
 @login_required
 @app.route('/preferences', methods= ['GET','POST'])
@@ -84,7 +84,7 @@ def preferences():
             artists_values = preferences['artists']
         except KeyError:
             pass
-    return render_template('preferences.html', pref_list = pref_list, genres_values = genres_values, langs_values =langs_values , artists_values = artists_values)
+    return render_template('preferences.html',  title = 'Moody | Edit Prefs',pref_list = pref_list, genres_values = genres_values, langs_values =langs_values , artists_values = artists_values)
 
 @login_required
 @app.route('/dashboard/<user>')
@@ -95,7 +95,10 @@ def dashboard (user):
         for k, v in dict(moods).items():
             if type(v) is float:
                 moods[k] = float (v) * 100     
-    return render_template('dashboard.html', user=user, profile = dict(profile), moods = moods)
+    suggestions = get_suggestions(current_user.username)
+    suggestions['video'].append('https://www.youtube.com/embed/09dhcI_pCMk')
+   # suggestions['video'].append('https://www.youtube.com/watch?v=09dhcI_pCMk')
+    return render_template('dashboard.html', title = 'Moody | {}'.format(profile['first_name']), user=user, profile = dict(profile), moods = moods, suggestions=suggestions)
 
 
 
