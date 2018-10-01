@@ -11,7 +11,7 @@ GENRES = ['']
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', title = 'Moody | Home')
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
@@ -32,7 +32,7 @@ def login():
         else:
             flash("Invalid Username. Try Again")
             return redirect (url_for('login'))
-    return render_template ('login.html')
+    return render_template ('login.html',  title = 'Moody | Login')
 
 @app.route('/logout')
 @login_required
@@ -57,7 +57,7 @@ def signup():
             user = User (mongo.db.users.find_one({'username' : form_data['username']}) )
             login_user(user)
             return redirect (url_for('preferences', user=current_user.username))  
-    return render_template('signup.html')
+    return render_template('signup.html',  title = 'Moody | Sign Up')
 
 @login_required
 @app.route('/preferences', methods= ['GET','POST'])
@@ -84,7 +84,7 @@ def preferences():
             artists_values = preferences['artists']
         except KeyError:
             pass
-    return render_template('preferences.html', pref_list = pref_list, genres_values = genres_values, langs_values =langs_values , artists_values = artists_values)
+    return render_template('preferences.html',  title = 'Moody | Edit Prefs',pref_list = pref_list, genres_values = genres_values, langs_values =langs_values , artists_values = artists_values)
 
 @login_required
 @app.route('/dashboard/<user>')
@@ -95,7 +95,8 @@ def dashboard (user):
         for k, v in dict(moods).items():
             if type(v) is float:
                 moods[k] = float (v) * 100     
-    return render_template('dashboard.html', user=user, profile = dict(profile), moods = moods)
+    tracks = [ 'https://open.spotify.com/embed/track/73TXMz1i41sGfOuDg8gH4L', 'https://open.spotify.com/embed/track/6ZANrVuAMp2rpjhfbOuJly', 'https://open.spotify.com/embed/track/73TXMz1i41sGfOuDg8gH4L', 'https://open.spotify.com/embed/track/73TXMz1i41sGfOuDg8gH4L']
+    return render_template('dashboard.html', title = 'Moody | {}'.format(profile['first_name']), user=user, profile = dict(profile), moods = moods, tracks = tracks)
 
 
 

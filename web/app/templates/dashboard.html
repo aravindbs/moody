@@ -13,32 +13,30 @@
                 <div class="moods">
                     <p class="font-medium"> Current Mood </p>
                     <div class="progress">
-                        <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"
-                            style="width:{{ moods.disgust }}%">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:{{ moods.disgust }}%">
                             <span class="sr-only">70% Complete</span>
                         </div>
                     </div>
                     <div class="progress">
-                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="70"
-                            aria-valuemin="0" aria-valuemax="100" style="width:{{ moods.joy }}%">
+                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"
+                            style="width:{{ moods.joy }}%">
                             <span class="sr-only">70% Complete</span>
                         </div>
                     </div>
                     <div class="progress">
-                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="70"
-                            aria-valuemin="0" aria-valuemax="100" style="width:{{ moods.anger }}%">
+                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"
+                            style="width:{{ moods.anger }}%">
                             <span class="sr-only">70% Complete</span>
                         </div>
                     </div>
                     <div class="progress">
-                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="70" aria-valuemin="0"
-                            aria-valuemax="100" style="width:{{ moods.sadness }}%">
+                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:{{ moods.sadness }}%">
                             <span class="sr-only">70% Complete</span>
                         </div>
                     </div>
                     <div class="progress">
-                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="70"
-                            aria-valuemin="0" aria-valuemax="100" style="width:{{ moods.fear }}%">
+                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"
+                            style="width:{{ moods.fear }}%">
                             <span class="sr-only">70% Complete</span>
                         </div>
                     </div>
@@ -48,44 +46,43 @@
 
             <div class="alert alert-success fade in">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-                {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            <div id="form-title">
-               
+                {% with messages = get_flashed_messages() %} {% if messages %}
+                <div id="form-title">
+
                     {% for message in messages %}
-                    <p>{{ message }}</p> <br>
-                    {% endfor %}
+                    <p>{{ message }}</p>
+                    <br> {% endfor %}
                 </div>
-                    {% endif %} {% endwith %}
+                {% endif %} {% endwith %}
             </div>
 
         </div>
         <div class="col-sm-9">
-            <div class="col-sm-9">
+            <div class="col-sm-12 dash-element">
                 <div class="dash-header text-left">
-                    <h5> Recent Moods</h5>
+                    <h5> Music Suggesstions </h5>
                 </div>
                 <div class="dash-body">
+                    {% for track in tracks %}
+                    <div class="col-sm-12 spotify-track">
+                        <iframe src="{{ track }}" width="100%" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                    </div>
+                    {% endfor %}
                 </div>
-
             </div>
-            <div class="col-sm-9">
+            <div class="col-sm-12 dash-element">
                 <div class="dash-header text-left">
-                    <h5>Suggesstions </h5>
+                    <h5> Video Activites</h5>
                 </div>
                 <div class="dash-body">
-                </div>
-
-            </div>
-            <div class="col-sm-12">
-                <div class="dash-header text-left">
-                    <h5> Your Activites</h5>
-                </div>
-                <div class="dash-body">
+                        <div class="col-sm-12 spotify-track">
+                        <iframe width="100%" height="150" src="https://www.youtube.com/embed/lJIrF4YjHfQ" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                        </div>
                 </div>
 
             </div>
 
         </div>
     </div>
-    {% endblock %}
+</div>
+{% endblock %}

@@ -85,11 +85,17 @@ label, button{
     border-radius: 5px;
 }
 .dash-body {
-    min-height: 30%;
+    height: 40%;
     background-color: lightgray !important;
     margin-bottom: 10px;
-    padding: 2%;
+    padding: 0%;
     border-radius: 5px;
+    overflow: scroll;
+}
+.dash-element {
+   
+    padding: 0%;
+   margin: 0%;
 }
 
 .well {
@@ -110,6 +116,12 @@ label, button{
     line-height: 10px;
     float: left;
   }
+
+.spotify-track {
+    padding: 0%;
+}
+
+
 
 @font-face { font-family: Ubuntu-M ;  src: url(../fonts/Ubuntu-M.ttf); }
 @font-face { font-family: Ubuntu-MI ;  src: url(../fonts/Ubuntu-MI.ttf); }
