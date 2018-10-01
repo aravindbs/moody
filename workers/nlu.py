@@ -3,12 +3,7 @@ from watson_developer_cloud import NaturalLanguageUnderstandingV1
 from watson_developer_cloud.natural_language_understanding_v1 import Features, EntitiesOptions, KeywordsOptions, EmotionOptions
 from watson_developer_cloud import ToneAnalyzerV3
 import pymongo
-
-with open("../config.yml", "r") as f:
-    config = yaml.load(f)
-
-myclient = pymongo.MongoClient(config['mongodb']['MONGO_URI'])
-db = myclient.testmoody
+from __init__ import config, db 
 
 tone_analyzer = ToneAnalyzerV3(
     version=config['watson']['version'],

@@ -3,17 +3,9 @@ from tweepy import API
 import requests 
 import json, yaml, datetime, time 
 import pymongo
-
-with open("../config.yml", "r") as f:
-    config = yaml.load(f)
+from __init__ import config, db 
 
 SLEEP_TIME = 2
-
-myclient = pymongo.MongoClient(config['mongodb']['MONGO_URI'])
-db = myclient.testmoody
-
-with open("../config.yml", "r") as f:
-    config = yaml.load(f)
 
 def calculate_age(tweet):
     now = datetime.datetime.now()

@@ -1,49 +1,60 @@
 import argparse
-import yaml
-
+import yaml,json
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-
-with open("../config.yml", "r") as f:
-    config = yaml.load(f)
+import pymongo
+from __init__ import config, db 
 
 DEVELOPER_KEY = config['YOUTUBE']
 YOUTUBE_API_SERVICE_NAME = 'youtube'
 YOUTUBE_API_VERSION = 'v3'
 
 def youtube_search(options):
-  youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,
-    developerKey=DEVELOPER_KEY)
+  youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,developerKey=DEVELOPER_KEY)
 
-  # Call the search.list method to retrieve results matching the specified
-  # query term.
-  search_response = youtube.search().list(
-    q='tamil comedy',
-    part='id,snippet',
-    maxResults=1
-  ).execute()
+  users = list(db.users.find({}))
+  preferences = list(db.preferences.find({})) 
+  emotions = list(db.emotions.find({}))
+  langs = {}
 
-  videos = []
-  channels = []
-  playlists = []
+  for pref in preferences: 
+        langs[pref['username']] = pref['langs']
 
-  for search_result in search_response.get('items', []):
-    #print(search_result)
-    #print(search_result['thumbnails']['default']['url'])
-    if search_result['id']['kind'] == 'youtube#video':
-      videos.append('%s (%s)' % (search_result['snippet']['title'],
-                                 search_result['id']['videoId']))
-    elif search_result['id']['kind'] == 'youtube#channel':
-      channels.append('%s (%s)' % (search_result['snippet']['title'],
-                                   search_result['id']['channelId']))
-    elif search_result['id']['kind'] == 'youtube#playlist':
-      playlists.append('%s (%s)' % (search_result['snippet']['title'],
-                                    search_result['id']['playlistId']))
+  for user in users:
+        suggest = {}
+        all_suggestions = []
+        print(user['username']) 
+        for emotion in emotions:
+            if emotion['username'] == user['username']: 
+                sadness = emotion['sadness']
+                anger = emotion['anger'] 
+        for lang in langs: 
+          curr_langs = langs[user['username']]
+        if sadness > 0.1:
+          for lang in curr_langs: 
+            print(lang)
+            search_response = youtube.search().list(
+              q= lang + 'comedy',
+              part='id,snippet',
+              maxResults=3, 
+              type='video', 
+              videoEmbeddable='true'
+            ).execute()
 
-  print ('Videos:\n', '\n'.join(videos), '\n')
-  print ('Channels:\n', '\n'.join(channels), '\n')
-  print ('Playlists:\n', '\n'.join(playlists), '\n')
+            
+          
+            for search_result in search_response.get('items', []):
+              suggest['name'] = search_result['snippet']['title']
+              suggest['url'] = 'https://www.youtube.com/watch?v=' + search_result['id']['videoId']
+              all_suggestions.append(suggest)
+              suggest = {}
+              #print(json.dumps(all_suggestions, indent=2))
 
+        print(json.dumps(all_suggestions, indent=2))
+
+        query = { 'username' : user['username'] }
+        update = { 'username' : user['username'] , 'suggestion' : all_suggestions }
+        db.video_suggestions.update(query, update, upsert=True)   
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
