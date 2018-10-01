@@ -29,7 +29,7 @@ print("Getting Tweets...")
 users = list(db.users.find({}))
 
 #print(most_recent)
-for i in range(2):
+while(1):
     most_recent = list(db.most_recent_tweet.find({})) 
     for user in users: 
         screen_name = user['twitter_handle']
@@ -59,7 +59,7 @@ for i in range(2):
             tweets.pop('_id', None)
             db.tweets.insert_one(tweets).inserted_id
 
-        #time.sleep(SLEEP_TIME) 
+        time.sleep(SLEEP_TIME) 
 
     
 

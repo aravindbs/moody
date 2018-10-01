@@ -42,7 +42,7 @@ for user in users:
     sadness = sadness / count 
 
     query = { 'screen_name' : user['twitter_handle']}
-    update = { 'screen_name' : user['twitter_handle'], 'anger' : anger, 'disgust' : disgust, 'fear' : fear, 'joy' : joy, 'sadness' : sadness }
+    update = { 'username' : user['username'] , 'screen_name' : user['twitter_handle'], 'anger' : anger, 'disgust' : disgust, 'fear' : fear, 'joy' : joy, 'sadness' : sadness }
     db.emotions.update(query, update, upsert=True)
             
 
