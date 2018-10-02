@@ -94,18 +94,29 @@ def preferences():
 @app.route('/dashboard/<user>')
 def dashboard (user):
     profile = mongo.db.users.find_one({'email' : current_user.email })
-    emotions = mongo.db.emotions.find_one({'screen_name' : dict(profile)['twitter_handle']})
-    moods = {}
+    emotions = mongo.db.emotions.find_one({'username' : current_user.username})
+    cur_emotion = {}
     if emotions:
-        for k, v in dict(emotions).items():
+        emotions = dict(emotions)
+        emotions = emotions['emotions'] #list 
+       
+        for emotion in emotions: 
+            for k,v in emotion.items():
+                if k == 'day' and v == '0': 
+                    cur_emotion = emotion
+                    break 
+    moods = cur_emotion
+    moods.pop('day', None)
+
+    if emotions:
+        for k, v in moods.items():
             if type(v) is float:
                 moods[k] = float (v) * 100     
     suggestions = get_suggestions(current_user.username)
     mood_color = get_mood_colors()
     emoji = get_emoji()
-   # print (moods)
-   # suggestions['video'].append('https://www.youtube.com/watch?v=09dhcI_pCMk')
     return render_template('dashboard.html', title = 'Moody | {}'.format(profile['first_name']), user=user, profile = dict(profile), moods = moods, mood_color = mood_color, emoji = emoji ,suggestions=suggestions)
+
 
 
 
