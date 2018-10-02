@@ -5,7 +5,7 @@ from googleapiclient.errors import HttpError
 import pymongo
 from __init__ import config, db 
 
-DEVELOPER_KEY = config['YOUTUBE']
+DEVELOPER_KEY = config['youtube']['YOUTUBE_KEY']
 YOUTUBE_API_SERVICE_NAME = 'youtube'
 YOUTUBE_API_VERSION = 'v3'
 
@@ -28,9 +28,11 @@ def youtube_search(options):
             if emotion['username'] == user['username']: 
                 sadness = emotion['sadness']
                 anger = emotion['anger'] 
+                joy = emotion['joy']
+                keywords = emotion['keywords'] 
         for lang in langs: 
           curr_langs = langs[user['username']]
-        if sadness > 0.1:
+        if sadness > joy:
           for lang in curr_langs: 
             print(lang)
             search_response = youtube.search().list(
@@ -41,14 +43,28 @@ def youtube_search(options):
               videoEmbeddable='true'
             ).execute()
 
-            
-          
             for search_result in search_response.get('items', []):
               suggest['name'] = search_result['snippet']['title']
               suggest['url'] = 'https://www.youtube.com/watch?v=' + search_result['id']['videoId']
               all_suggestions.append(suggest)
               suggest = {}
               #print(json.dumps(all_suggestions, indent=2))
+        else: 
+          for keyword in keywords: 
+            search_response = youtube.search().list(
+                q= keyword,
+                part='id,snippet',
+                maxResults=3, 
+                type='video', 
+                videoEmbeddable='true'
+              ).execute()
+
+            for search_result in search_response.get('items', []):
+                suggest['name'] = search_result['snippet']['title']
+                suggest['url'] = 'https://www.youtube.com/watch?v=' + search_result['id']['videoId']
+                all_suggestions.append(suggest)
+                suggest = {}
+
 
         print(json.dumps(all_suggestions, indent=2))
 
@@ -62,5 +78,5 @@ if __name__ == '__main__':
     parser.add_argument('--max-results', help='Max results', default=25)
     args = parser.parse_args()
 
-
+    #while(1):
     youtube_search(args)

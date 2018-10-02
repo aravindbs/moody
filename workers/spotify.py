@@ -8,7 +8,7 @@ from __init__ import config, db
 def get_token():
     url = 'https://accounts.spotify.com/api/token'
 
-    headers = {'Authorization' : 'Basic ' + config['SPOTIFY']}
+    headers = {'Authorization' : 'Basic ' + config['spotify']['SPOTIFY_KEY']}
 
     data = {'grant_type' : 'client_credentials'}
 

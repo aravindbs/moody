@@ -42,14 +42,21 @@ while(1):
             update = { 'screen_name' : screen_name, 'id' : result[0].id}
             db.most_recent_tweet.update(query, update, upsert=True)
         
+        all_tweets = []
         tweets = {}
         for r in result: 
             tweets['screen_name'] = screen_name
             tweets['tweet_id'] = r.id
             tweets['created_at'] = r.created_at 
+            print(type(r.created_at))
             tweets['text'] = r.text
             tweets.pop('_id', None)
-            db.tweets.insert_one(tweets).inserted_id
+            all_tweets.append(tweets)
+
+        query = { 'username' : user['username'] }
+        update = { 'username' : user['username'] , 'tweets' : all_tweets }
+        db.tweets.update(query, update, upsert=True)
+            
 
         time.sleep(SLEEP_TIME) 
 
