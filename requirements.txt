@@ -26,7 +26,6 @@ mathparse==0.1.2
 mccabe==0.6.1
 nltk==3.3
 oauthlib==2.1.0
-pkg-resources==0.0.0
 pyasn1==0.4.4
 pyasn1-modules==0.2.2
 pycodestyle==2.4.0
