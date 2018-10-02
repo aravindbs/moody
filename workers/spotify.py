@@ -38,65 +38,78 @@ def get_artist_ids(artists):
     return artist_ids
 
 if __name__ == '__main__': 
-
-    users = list(db.users.find({}))
-    preferences = list(db.preferences.find({})) 
-    emotions = list(db.emotions.find({}))
-
-    artists = {}
-    
-    genres = {}
-    for pref in preferences: 
-        artists[pref['username']] = pref['artists']
-        #langs[pref['username']] = pref['langs']
-        #genres[pref['username']] = pref['genres']
-    
-    access_token = get_token()
-    for user in users: 
-        #user_genres = genres[user['username']]
-        artist_ids = get_artist_ids(artists[user['username']])
-        print(artist_ids)
-
-        for emotion in emotions:
-            if emotion['username'] == user['username']: 
-                sadness = emotion['sadness']
-                anger = emotion['anger'] 
-
-        payload = {
-            'seed_artists' : ','.join(artist_ids), 
-            #'seed_genres' : ','.join(user_genres),
-            'limit' : '5',
-            'target_valence' : sadness if sadness > anger and sadness > 0.4 else 0.5 ,
-            'taget_energy' : sadness if sadness > anger and sadness > 0.4 else 0.2,
-            'target_instrumentalness' : 0.7 if anger > sadness and anger > 0.4 else 0.3, #instrumental music in angry
-            'target_danceability': 0.2 if anger > sadness and anger > 0.4 else 0.5,
-            'min_popularity' : '50', 
-            'market' : 'US'
-        }
-
-
-        url = 'https://api.spotify.com/v1/recommendations'
-
-        headers = {'Authorization' : 'Bearer ' + access_token }
-
-        r = requests.get(url, params=payload, headers=headers).json()
-        tracks = r['tracks']
-        suggest = {}
-        all_suggestions = []
-        for track in tracks: 
-            suggest['name'] = track['name']
-            url = track['external_urls']['spotify']
-            print(url)
-            index = url.find('/track') 
-            url = url[:index] + '/embed' + url[index:]
-            print(url)
-            suggest['url'] = url
-            suggest['artist'] = track['artists'][0]['name']
-            all_suggestions.append(suggest)
-            suggest = {}
-        query = { 'username' : user['username'] }
-        update = { 'username' : user['username'] , 'suggestion' : all_suggestions }
-        db.music_suggestions.update(query, update, upsert=True)
+    while(1):
+        users = list(db.users.find({}))
+        preferences = list(db.preferences.find({})) 
         
+
+        artists = {}
+        
+        genres = {}
+        for pref in preferences: 
+            artists[pref['username']] = pref['artists']
+            #langs[pref['username']] = pref['langs']
+            #genres[pref['username']] = pref['genres']
+        
+        access_token = get_token()
+        for user in users: 
+            print(user['username'])
+            #user_genres = genres[user['username']]
+            artist_ids = get_artist_ids(artists[user['username']])
+            #print(artist_ids)
+            try:
+                emotions = list(db.emotions.find({'username' : user['username']}))
+                emotions = emotions[0]
+                emotions.pop('_id', None)
+                emotions = emotions['emotions']
+                curr_emotion = None 
+                for emotion in emotions: 
+                    if emotion['day'] == '0': 
+                        curr_emotion = emotion
+                        break 
+                if curr_emotion == None: 
+                    continue
+                print(curr_emotion)
+                
+                sadness = curr_emotion['sadness']
+                anger = curr_emotion['anger'] 
+
+                payload = {
+                    'seed_artists' : ','.join(artist_ids), 
+                    #'seed_genres' : ','.join(user_genres),
+                    'limit' : '5',
+                    'target_valence' : sadness if sadness > anger and sadness > 0.4 else 0.5 ,
+                    'taget_energy' : sadness if sadness > anger and sadness > 0.4 else 0.2,
+                    'target_instrumentalness' : 0.7 if anger > sadness and anger > 0.4 else 0.3, #instrumental music in angry
+                    'target_danceability': 0.2 if anger > sadness and anger > 0.4 else 0.5,
+                    'min_popularity' : '50', 
+                    'market' : 'US'
+                }
+
+
+                url = 'https://api.spotify.com/v1/recommendations'
+
+                headers = {'Authorization' : 'Bearer ' + access_token }
+
+                r = requests.get(url, params=payload, headers=headers).json()
+                tracks = r['tracks']
+                suggest = {}
+                all_suggestions = []
+                for track in tracks: 
+                    suggest['name'] = track['name']
+                    url = track['external_urls']['spotify']
+                    print(url)
+                    index = url.find('/track') 
+                    url = url[:index] + '/embed' + url[index:]
+                    print(url)
+                    suggest['url'] = url
+                    suggest['artist'] = track['artists'][0]['name']
+                    all_suggestions.append(suggest)
+                    suggest = {}
+                query = { 'username' : user['username'] }
+                update = { 'username' : user['username'] , 'suggestion' : all_suggestions }
+                db.music_suggestions.update(query, update, upsert=True)
+            except: 
+                pass 
 
  

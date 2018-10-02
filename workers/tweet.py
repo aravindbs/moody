@@ -27,13 +27,17 @@ while(1):
     for user in users: 
         screen_name = user['twitter_handle']
         print(screen_name)
-        if len(most_recent) == 0: 
+        if most_recent and len(most_recent) == 0: 
             print("none")
             result = list(api.user_timeline(screen_name=screen_name, count=10))
         else: 
             since_id = db.most_recent_tweet.find_one({'screen_name' : screen_name})
             #print(since_id)
+<<<<<<< HEAD
             if len(since_id) == 0:
+=======
+            if since_id is None or len(since_id) == 0:
+>>>>>>> a1c6499e89c5d43db9831932d09cd7a4b33eb287
                 result = list(api.user_timeline(screen_name=screen_name, count=30)) 
             else:
                 result = list(api.user_timeline(screen_name=screen_name, count=30, since_id=since_id['id']))
