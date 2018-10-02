@@ -1,1 +1,1 @@
-web: ./runweb.sh
+web: ./rnweb.sh
