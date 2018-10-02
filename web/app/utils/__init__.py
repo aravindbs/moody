@@ -1,9 +1,8 @@
 import json
-from app import mongo
-import re 
-
+from app import mongo, APP_UTILS
+import os
 def get_prefs():
-    with open('utils/lists.json', 'r') as f:
+    with open(os.path.join(APP_UTILS, 'lists.json'), 'r') as f:
         pref_list = json.load (f)
         return pref_list
 
@@ -25,10 +24,10 @@ def get_suggestions (user):
     return suggestions
 
 def get_mood_colors ():
-    with open ('utils/mood_to_color.json', 'r') as f:
+    with open (os.path.join(APP_UTILS, 'mood_to_color.json'), 'r') as f:
         return json.load(f)
     
 def get_emoji ():
-    with open ('utils/mood_to_emoji.json', 'r') as f:
+    with open (os.path.join(APP_UTILS, 'mood_to_emoji.json'), 'r') as f:
         return json.load(f)
 

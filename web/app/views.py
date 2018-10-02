@@ -5,7 +5,7 @@ from flask_login import login_user, login_required,current_user, logout_user,log
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.login import User
 import os
-from utils import get_prefs, get_suggestions, get_mood_colors, get_emoji
+from .utils import get_prefs, get_suggestions, get_mood_colors, get_emoji
 
 GENRES = ['']
 
