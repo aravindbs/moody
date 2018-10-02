@@ -60,11 +60,11 @@
                         var myLineChart = new Chart(ctx, {
                             type: 'line',
                             data: {{ payload| tojson | safe }}
-                        options: {
+                        ,options: {
                             responsive: true,
                                 title: {
                                 display: true,
-                                    text: 'Chart.js Line Chart'
+                                    text: 'Analytics Graph'
                             },
                             tooltips: {
                                 mode: 'index',
@@ -79,7 +79,7 @@
                                     display: true,
                                     scaleLabel: {
                                         display: true,
-                                        labelString: 'Month'
+                                        labelString: 'Date'
                                     }
                                 }],
                                     yAxes: [{
@@ -91,7 +91,7 @@
                                     }]
                             }
                         }
-		};
+	
                                 });
                     </script>
                 </div>
