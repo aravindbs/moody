@@ -46,7 +46,26 @@
 
         </div>
         <div class="col-sm-9">
-            <div class="col-sm-12 dash-element">
+                <div class="col-sm-12 dash-element">
+                        <div class="dash-header text-left">
+                            <h5> Blog Suggestions</h5>
+                        </div>
+                        <div class="dash-body">
+                            <div style="width:75%;">
+                                <canvas id="canvas"></canvas>
+                            </div>
+                            <script>
+                        
+                                var ctx = document.getElementById("canvas").getContext('2d');
+                                var myLineChart = new Chart(ctx, {
+                                    type: 'line',
+                                    data: {{ payload|tojson|safe }} 
+                                  //  options: options
+                                });
+                            </script>
+                        </div>
+                    </div>
+            <div class="col-sm-6 dash-element">
                 <div class="dash-header text-left">
                     <h5> Music Suggestions </h5>
                 </div>
@@ -92,13 +111,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 dash-element">
-                <div class="dash-header text-left">
-                    <h5> Blog Suggestions</h5>
-                </div>
-                <div class="dash-body">
-                </div>
-            </div>
+            
         </div>
     </div>
 </div>

@@ -5,8 +5,8 @@ from flask_login import login_user, login_required,current_user, logout_user,log
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.login import User
 import os
-from .utils import get_prefs, get_suggestions, get_mood_colors, get_emoji
-
+from .utils import get_prefs, get_suggestions, get_mood_colors, get_emoji, get_chart_data
+import json
 GENRES = ['']
 
 @app.route('/')
@@ -96,10 +96,11 @@ def dashboard (user):
     profile = mongo.db.users.find_one({'email' : current_user.email })
     emotions = mongo.db.emotions.find_one({'username' : current_user.username})
     cur_emotion = {}
+   # chart_data = {}
     if emotions:
         emotions = dict(emotions)
-        emotions = emotions['emotions'] #list 
-       
+        emotions = emotions['emotions'] #list
+        chart_data = emotions 
         for emotion in emotions: 
             for k,v in emotion.items():
                 if k == 'day' and v == '0': 
@@ -107,7 +108,6 @@ def dashboard (user):
                     break 
     moods = cur_emotion
     moods.pop('day', None)
-
     if emotions:
         for k, v in moods.items():
             if type(v) is float:
@@ -115,7 +115,10 @@ def dashboard (user):
     suggestions = get_suggestions(current_user.username)
     mood_color = get_mood_colors()
     emoji = get_emoji()
-    return render_template('dashboard.html', title = 'Moody | {}'.format(profile['first_name']), user=user, profile = dict(profile), moods = moods, mood_color = mood_color, emoji = emoji ,suggestions=suggestions)
+    payload = get_chart_data(moods,mood_color)
+    #payload = json.dumps(payload)
+    print (payload)
+    return render_template('dashboard.html', title = 'Moody | {}'.format(profile['first_name']), payload= payload, user=user, profile = dict(profile), moods = moods, mood_color = mood_color, emoji = emoji ,suggestions=suggestions)
 
 
 
