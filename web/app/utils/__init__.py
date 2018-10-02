@@ -19,7 +19,7 @@ def get_suggestions (user):
             link = url['url']
             link = link.replace("watch?v=", "embed/")
             suggestions['video'].append(link)
-    except KeyError:
+    except:
         pass
     return suggestions
 

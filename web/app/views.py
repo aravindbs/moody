@@ -11,6 +11,9 @@ GENRES = ['']
 
 @app.route('/')
 def index():
+    if current_user.is_authenticated :
+        return redirect (url_for('dashboard', user=current_user.username))
+    
     return render_template('index.html', title = 'Moody | Home')
 
 @app.route('/login', methods = ['GET', 'POST'])
@@ -98,7 +101,6 @@ def dashboard (user):
             if type(v) is float:
                 moods[k] = float (v) * 100     
     suggestions = get_suggestions(current_user.username)
-    suggestions['video'].append('https://www.youtube.com/embed/09dhcI_pCMk')
     mood_color = get_mood_colors()
     emoji = get_emoji()
    # print (moods)

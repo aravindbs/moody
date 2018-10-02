@@ -4,6 +4,7 @@ import requests
 import json, yaml, datetime, time 
 import pymongo
 from __init__ import config, db 
+from collections import defaultdict
 
 SLEEP_TIME = 2
 
@@ -31,25 +32,34 @@ while(1):
             result = list(api.user_timeline(screen_name=screen_name, count=10))
         else: 
             since_id = db.most_recent_tweet.find_one({'screen_name' : screen_name})
-            print(since_id)
+            #print(since_id)
             if len(since_id) == 0:
-                result = list(api.user_timeline(screen_name=screen_name, count=10)) 
+                result = list(api.user_timeline(screen_name=screen_name, count=30)) 
             else:
-                result = list(api.user_timeline(screen_name=screen_name, count=10, since_id=since_id['id']))
+                result = list(api.user_timeline(screen_name=screen_name, count=30, since_id=since_id['id']))
 
         if result: 
             query = { 'screen_name' : screen_name}
             update = { 'screen_name' : screen_name, 'id' : result[0].id}
             db.most_recent_tweet.update(query, update, upsert=True)
         
-        tweets = {}
-        for r in result: 
-            tweets['screen_name'] = screen_name
-            tweets['tweet_id'] = r.id
-            tweets['created_at'] = r.created_at 
-            tweets['text'] = r.text
-            tweets.pop('_id', None)
-            db.tweets.insert_one(tweets).inserted_id
+            all_tweets = []
+            tweets = {}
+            db_tweets = defaultdict(list)
+            for r in result: 
+                tweets['screen_name'] = screen_name
+                tweets['tweet_id'] = r.id
+                tweets['created_at'] = r.created_at 
+                tweets['text'] = r.text
+                diff = datetime.datetime.now() - r.created_at
+                
+                (db_tweets[str(diff.days)]).append(tweets)
+
+            print(db_tweets)
+            query = { 'username' : user['username'] }
+            update = { 'username' : user['username'] , 'tweets' : dict(db_tweets) }
+            db.tweets.update(query, update, upsert=True)
+            
 
         time.sleep(SLEEP_TIME) 
 
