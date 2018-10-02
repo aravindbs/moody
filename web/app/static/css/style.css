@@ -14,10 +14,7 @@ body {
 html {
     height: 100%;
 }
-.bg { 
-    /* The image used */
-    
-}
+
 
 .main-body {
     min-height: 0%;
@@ -32,14 +29,14 @@ html {
 .page-wrap {
     min-height: 100%;
     /* equal to footer height */
-    margin-bottom: -142px; 
+    margin-bottom: -90px; 
   }
   .page-wrap:after {
     content: "";
     display: block;
   }
   .site-footer, .page-wrap:after {
-    height: 142px; 
+    height: 90px; 
   }
 
 
@@ -148,6 +145,10 @@ label, button{
 .checkbox {
     max-height: 30%;
     overflow: scroll;
+}
+#github-logo{
+    height: 14px;
+    width: 14px;
 }
 
 

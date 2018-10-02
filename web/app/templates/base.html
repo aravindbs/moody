@@ -12,6 +12,7 @@
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css' ) }}">
+    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
 
 </head>
 
@@ -71,9 +72,17 @@
     {% endblock %}
     </div>
     <footer id="footer" class="container-fluid text-center site-footer">
-        <p>
-            <a href="https://github.com/aravindbs">Source Code</a>
-        </p>
+        <h5>
+            Contact us
+        </h5>
+        <h6>
+            <a href="https://www.linkedin.com/in/ashmita-raju-0a0839115/">Ashmita Raju</a> | 
+            <a href="https://www.linkedin.com/in/aravindbs">Aravind B S</a>
+        </h6>
+        <h6>
+            <img id="github-logo" src="{{ url_for('static', filename='img/GitHub-Mark-Light-32px.png') }}">
+            <a href="https://github.com/aravindbs/moody">Source Code</a>
+        <h6>
     </footer>
 
 </body>
