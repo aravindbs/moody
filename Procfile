@@ -1,2 +1,1 @@
-worker: ./rntweets.sh
-worker: ./rnnlu.sh
+web: ./rnweb.sh
