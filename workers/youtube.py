@@ -10,7 +10,7 @@ YOUTUBE_API_SERVICE_NAME = 'youtube'
 YOUTUBE_API_VERSION = 'v3'
 
 def youtube_search(options):
-  youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION,developerKey=DEVELOPER_KEY)
+  youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, developerKey=DEVELOPER_KEY)
 
   users = list(db.users.find({}))
   preferences = list(db.preferences.find({})) 
@@ -78,5 +78,5 @@ if __name__ == '__main__':
     parser.add_argument('--max-results', help='Max results', default=25)
     args = parser.parse_args()
 
-    #while(1):
-    youtube_search(args)
+    while(1):
+      youtube_search(args)
