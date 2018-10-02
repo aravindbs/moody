@@ -7,6 +7,8 @@ env
 test.json
 client_secrets.json 
 blogger.dat
+env_set.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
