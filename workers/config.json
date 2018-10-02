@@ -1,0 +1,31 @@
+{
+  "watson_tone": {
+    "TONE_VERSION": "",
+    "TONE_PASSWORD": "",
+    "TONE_USERNAME": "",
+    "TONE_URL": ""
+  },
+  "flask": {
+    "SECRET_KEY": ""
+  },
+  "twitter": {
+    "ACCESS_TOKEN_SECRET": "",
+    "CONSUMER_KEY": "",
+    "ACCESS_TOKEN": "",
+    "CONSUMER_SECRET": ""
+  },
+  "watson_nlu": {
+    "NLU_USERNAME": "",
+    "NLU_PASSWORD": "",
+    "NLU_VERSION": ""
+  },
+  "spotify": {
+    "SPOTIFY_KEY": ""
+  },
+  "mongodb": {
+    "MONGO_URI": ""
+  },
+  "youtube": {
+    "YOUTUBE_KEY": ""
+  }
+}

@@ -3,6 +3,7 @@ your-first-pwapp-master
 test.py
 .vscode
 config.yml
+env_set.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
