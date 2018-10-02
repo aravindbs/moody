@@ -3,7 +3,10 @@ your-first-pwapp-master
 test.py
 .vscode
 config.yml
-
+ 
+test.json
+client_secrets.json 
+blogger.dat
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

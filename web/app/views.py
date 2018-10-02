@@ -11,6 +11,9 @@ GENRES = ['']
 
 @app.route('/')
 def index():
+    if current_user.is_authenticated :
+        return redirect (url_for('dashboard', user=current_user.username))
+    
     return render_template('index.html', title = 'Moody | Home')
 
 @app.route('/login', methods = ['GET', 'POST'])
