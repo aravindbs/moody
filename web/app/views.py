@@ -48,6 +48,7 @@ def signup():
         pwd = form_data['password']
         hashed_pwd = generate_password_hash(pwd)
         form_data['password'] = hashed_pwd
+
         if mongo.db.users.find_one({ 'email' : form_data['email']}) or mongo.db.users.find_one({ 'username' : form_data['username']}):
             flash("Username Exists, Try Again")
             print ('here')

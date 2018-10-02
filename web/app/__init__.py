@@ -15,7 +15,7 @@ def load_config ():
         for key, value in config.items():
             for _key, _value in value.items():
                 value[_key] = os.environ[_key]
-                print (value[_key])
+               # print (value[_key])
         return config
 
 config = load_config()

@@ -1,9 +1,10 @@
 {% extends "base.html" %} {% block body %}
 <script type="text/javascript">
-    window._chatlio = window._chatlio||[];
-    !function(){ var t=document.getElementById("chatlio-widget-embed");if(t&&window.ChatlioReact&&_chatlio.init)return void _chatlio.init(t,ChatlioReact);for(var e=function(t){return function(){_chatlio.push([t].concat(arguments)) }},i=["configure","identify","track","show","hide","isShown","isOnline", "page", "open", "showOrHide"],a=0;a<i.length;a++)_chatlio[i[a]]||(_chatlio[i[a]]=e(i[a]));var n=document.createElement("script"),c=document.getElementsByTagName("script")[0];n.id="chatlio-widget-embed",n.src="https://w.chatlio.com/w.chatlio-widget.js",n.async=!0,n.setAttribute("data-embed-version","2.3");
-       n.setAttribute('data-widget-id','833173f0-6ac3-496b-7edc-1cc4ea4a899a');
-       c.parentNode.insertBefore(n,c);
+    window._chatlio = window._chatlio || [];
+    !function () {
+        var t = document.getElementById("chatlio-widget-embed"); if (t && window.ChatlioReact && _chatlio.init) return void _chatlio.init(t, ChatlioReact); for (var e = function (t) { return function () { _chatlio.push([t].concat(arguments)) } }, i = ["configure", "identify", "track", "show", "hide", "isShown", "isOnline", "page", "open", "showOrHide"], a = 0; a < i.length; a++)_chatlio[i[a]] || (_chatlio[i[a]] = e(i[a])); var n = document.createElement("script"), c = document.getElementsByTagName("script")[0]; n.id = "chatlio-widget-embed", n.src = "https://w.chatlio.com/w.chatlio-widget.js", n.async = !0, n.setAttribute("data-embed-version", "2.3");
+        n.setAttribute('data-widget-id', '833173f0-6ac3-496b-7edc-1cc4ea4a899a');
+        c.parentNode.insertBefore(n, c);
     }();
 </script>
 
@@ -20,8 +21,7 @@
             <div class="well">
                 <div class="moods">
                     <p class="font-medium"> Current Mood </p>
-                    {% if moods %}
-                    {% for k,v in moods.items() %}
+                    {% if moods %} {% for k,v in moods.items() %}
                     <p style="text-transform: capitalize;">{{ k }}</p>
                     <i class="{{ emoji[k] }}"></i>
                     <div class="progress">
@@ -29,11 +29,10 @@
                             <span class="sr-only">70% Complete</span>
                         </div>
                     </div>
-                    {% endfor %}
-                    {% endif %}
+                    {% endfor %} {% endif %}
                 </div>
             </div>
-        
+
             {% with messages = get_flashed_messages() %} {% if messages %}
             <div class="alert alert-success fade in">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
@@ -42,14 +41,14 @@
                     <p>{{ message }}</p>
                     <br> {% endfor %}
                 </div>
-                {% endif %} {% endwith %}
             </div>
+            {% endif %} {% endwith %}
 
         </div>
         <div class="col-sm-9">
             <div class="col-sm-12 dash-element">
                 <div class="dash-header text-left">
-                    <h5> Music Suggesstions </h5>
+                    <h5> Music Suggestions </h5>
                 </div>
                 <div class="dash-body">
                     {% for track in suggestions.music %}
@@ -59,16 +58,16 @@
                     {% endfor %}
                 </div>
             </div>
-            <div class="col-sm-12 dash-element">
+            <div class="col-sm-6 dash-element">
                 <div class="dash-header text-left">
-                    <h5> Video Suggesstions</h5>
+                    <h5> Video Suggestions</h5>
                 </div>
                 <div class="dash-body-video">
                     <div id="myCarousel" class="carousel slide" data-ride="carousel">
                         <!-- Indicators -->
                         <ol class="carousel-indicators">
                             {% for video in suggestions.video %}
-                            <li data-target="#myCarousel" data-slide-to="{{ loop.index - 1 }}" {% if loop.counter == 1 %}class="active"{% endif %}></li>
+                            <li data-target="#myCarousel" data-slide-to="{{ loop.index - 1 }}" {% if loop.counter==1 %}class="active" {% endif %}></li>
                             {% endfor %}
                         </ol>
 
@@ -91,6 +90,13 @@
                             <span class="sr-only">Next</span>
                         </a>
                     </div>
+                </div>
+            </div>
+            <div class="col-sm-6 dash-element">
+                <div class="dash-header text-left">
+                    <h5> Blog Suggestions</h5>
+                </div>
+                <div class="dash-body">
                 </div>
             </div>
         </div>
