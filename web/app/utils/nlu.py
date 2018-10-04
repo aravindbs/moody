@@ -82,3 +82,5 @@ def nlu(users):
         query = { 'screen_name' : user['twitter_handle']}
         update = { 'username' : user['username'] , 'screen_name' : user['twitter_handle'] , 'emotions' : all_emotions, 'keywords' : db_keywords }
         db.emotions.update(query, update, upsert=True)
+
+return True 

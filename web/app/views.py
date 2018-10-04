@@ -8,7 +8,7 @@ import os
 from .utils import get_prefs, get_suggestions, get_mood_colors, get_emoji
 from app.utils.spotify import spotify
 from app.utils.tweet import get_tweets
-from app.utils.youtube import youtube
+from app.utils.youtube import youtube_search
 from app.utils.nlu import nlu
 
 GENRES = ['']
@@ -78,11 +78,11 @@ def preferences():
         update = { 'username' : current_user.username, 'langs' : langs, 'artists' : artists, 'genres' : genres }
         mongo.db.preferences.update ( query, update, upsert =True)
         flash ('Preferences Updated')
-        user = mongo.db.users.find_one({'username' : current_user.username})
+        user = mongo.db.users.find({'username' : current_user.username})
         get_tweets(user)
         nlu(user)
         spotify(user)
-        youtube(user)
+        youtube_search(user)
         return redirect (url_for('dashboard', user=current_user.username))
 
     preferences = mongo.db.preferences.find_one(query)
