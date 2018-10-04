@@ -8,15 +8,15 @@ def get_chart_data (emotions, mood_color):
 
     datasets = {}
     for k, v in mood_color.items():
-        datasets[k] = {'label' : k, 'backgroundColor' : v, 'data' : [],  'fill' : False }
+        datasets[k] = {'label' : k, 'backgroundColor' : v, 'data' : [],  'fill' : False, 'borderColor' : v }
     labels = []
     emotions =  [
         {
-            "sadness": 0.419976,
-            "disgust": 0.206897,
+            "sadness": 0.32129976,
+            "disgust": 0.2123236897,
             "day": "3",
-            "anger": 0.528375,
-            "fear": 0.048348,
+            "anger": 0.1231238375,
+            "fear": 0.3128348,
             "joy": 0.058889
         },
         {
@@ -28,36 +28,36 @@ def get_chart_data (emotions, mood_color):
             "joy": 0.05888899999999999
         },
         {
-            "sadness": 0.419976,
-            "disgust": 0.20689700000000003,
+            "sadness": 0.4123319976,
+            "disgust": 0.4234256365763220689700000000003,
             "day": "5",
-            "anger": 0.528375,
-            "fear": 0.048348,
-            "joy": 0.05888899999999999
+            "anger": 0.34325325528375,
+            "fear": 0.46324048348,
+            "joy": 0.235325888899999999999
         },
         {
-            "sadness": 0.419976,
-            "disgust": 0.206897,
+            "sadness": 0.696799976,
+            "disgust": 0.67567665897,
             "day": "4",
-            "anger": 0.528375,
-            "fear": 0.048348,
-            "joy": 0.058889
+            "anger": 0.456328375,
+            "fear": 0.35364548348,
+            "joy": 0.8889
         },
         {
-            "sadness": 0.41997600000000007,
-            "disgust": 0.20689700000000005,
+            "sadness": 0.32421997600000000007,
+            "disgust": 0.34220689700000000005,
             "day": "6",
-            "anger": 0.528375,
-            "fear": 0.048348,
+            "anger": 0.23423528375,
+            "fear": 0.4234048348,
             "joy": 0.05888899999999998
         },
         {
             "sadness": 0.41997599999999996,
             "disgust": 0.206897,
             "day": "0",
-            "anger": 0.528375,
+            "anger": 0.2342528375,
             "fear": 0.048348,
-            "joy": 0.058889
+            "joy": 0.3424058889
         },
         {
             "sadness": 0.41997600000000007,
@@ -79,8 +79,13 @@ def get_chart_data (emotions, mood_color):
         data.append(v)
     
     payload = { 'labels' : labels, 'datasets': data }
+    chart_options = {}
+    with open(os.path.join(APP_UTILS, 'chart_options.json'), 'r') as f:
+        chart_options = json.load (f)
+        
+        
 
-    return payload
+    return [ payload , chart_options ]
     
 
 

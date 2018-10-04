@@ -60,38 +60,7 @@
                         var myLineChart = new Chart(ctx, {
                             type: 'line',
                             data: {{ payload| tojson | safe }}
-                        ,options: {
-                            responsive: true,
-                                title: {
-                                display: true,
-                                    text: 'Analytics Graph'
-                            },
-                            tooltips: {
-                                mode: 'index',
-                                    intersect: false,
-				},
-                            hover: {
-                                mode: 'nearest',
-                                    intersect: true
-                            },
-                            scales: {
-                                xAxes: [{
-                                    display: true,
-                                    scaleLabel: {
-                                        display: true,
-                                        labelString: 'Date'
-                                    }
-                                }],
-                                    yAxes: [{
-                                        display: true,
-                                        scaleLabel: {
-                                            display: true,
-                                            labelString: 'Value'
-                                        }
-                                    }]
-                            }
-                        }
-	
+                        ,options: {{ chart_options|tojson|safe }}
                                 });
                     </script>
                 </div>
