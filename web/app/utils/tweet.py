@@ -3,19 +3,27 @@ from tweepy import API
 import requests 
 import json, yaml, datetime, time 
 import pymongo
-from __init__ import config, db 
+
 from collections import defaultdict
 
-SLEEP_TIME = 2
+from app.utils import config
 
+myclient = pymongo.MongoClient(config['mongodb']['MONGO_URI'])
+db = myclient.testmoody
+
+
+
+def calculate_age(tweet):
+    now = datetime.datetime.now()
+    return ( now.hour - tweet.hour )*60 + (now.minute - tweet.minute)
+    
 auth = OAuthHandler(config['twitter']['CONSUMER_KEY'], config['twitter']['CONSUMER_SECRET'])
 auth.set_access_token(config['twitter']['ACCESS_TOKEN'], config['twitter']['ACCESS_TOKEN_SECRET'])
 
 api = API(auth, wait_on_rate_limit = True)
 
-def calculate_age(tweet):
-    now = datetime.datetime.now()
-    return ( now.hour - tweet.hour )*60 + (now.minute - tweet.minute)
+print("Getting Tweets...")
+
 
 
 def get_tweets(users):
@@ -56,13 +64,9 @@ def get_tweets(users):
             query = { 'username' : user['username'] }
             update = { 'username' : user['username'] , 'tweets' : dict(db_tweets) }
             db.tweets.update(query, update, upsert=True)
-            
-
-        time.sleep(SLEEP_TIME) 
+        
 
     
-if __name__ == '__main__': 
-    users = list(db.users.find({}))
-    while(1):
-        get_tweets(users)
+
+        
 

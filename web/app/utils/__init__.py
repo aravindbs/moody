@@ -1,6 +1,21 @@
 import json
 from app import mongo, APP_UTILS
 import os
+from dotenv import load_dotenv
+load_dotenv(dotenv_path=".env")
+def load_config ():
+    with open("config.json", "r") as f:
+       # load_dotenv()
+        #os.system('pwd')
+        config = json.load(f)
+        for key, value in config.items():
+            for _key, _value in value.items():
+                value[_key] = os.environ[_key]
+               # print (value[_key])
+        return config
+
+config = load_config()
+
 def get_prefs():
     with open(os.path.join(APP_UTILS, 'lists.json'), 'r') as f:
         pref_list = json.load (f)
@@ -30,4 +45,3 @@ def get_mood_colors ():
 def get_emoji ():
     with open (os.path.join(APP_UTILS, 'mood_to_emoji.json'), 'r') as f:
         return json.load(f)
-

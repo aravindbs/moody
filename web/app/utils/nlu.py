@@ -5,7 +5,11 @@ from watson_developer_cloud import ToneAnalyzerV3
 import pymongo
 import datetime
 
-from __init__ import config, db 
+from app.utils import config
+
+myclient = pymongo.MongoClient(config['mongodb']['MONGO_URI'])
+db = myclient.testmoody
+
 
 tone_analyzer = ToneAnalyzerV3(
     version=config['watson_tone']['TONE_VERSION'],
@@ -78,10 +82,3 @@ def nlu(users):
         query = { 'screen_name' : user['twitter_handle']}
         update = { 'username' : user['username'] , 'screen_name' : user['twitter_handle'] , 'emotions' : all_emotions, 'keywords' : db_keywords }
         db.emotions.update(query, update, upsert=True)
-
-if __name__ == '__main__': 
-    print("hey")
-    users = list(db.users.find({}))
-    while(1):
-        nlu(users)
-
