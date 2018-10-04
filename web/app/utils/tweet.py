@@ -3,19 +3,27 @@ from tweepy import API
 import requests 
 import json, yaml, datetime, time 
 import pymongo
-from __init__ import config, db 
+
 from collections import defaultdict
 
-SLEEP_TIME = 2
+from app.utils import config
 
+myclient = pymongo.MongoClient(config['mongodb']['MONGO_URI'])
+db = myclient.testmoody
+
+
+
+def calculate_age(tweet):
+    now = datetime.datetime.now()
+    return ( now.hour - tweet.hour )*60 + (now.minute - tweet.minute)
+    
 auth = OAuthHandler(config['twitter']['CONSUMER_KEY'], config['twitter']['CONSUMER_SECRET'])
 auth.set_access_token(config['twitter']['ACCESS_TOKEN'], config['twitter']['ACCESS_TOKEN_SECRET'])
 
 api = API(auth, wait_on_rate_limit = True)
 
-def calculate_age(tweet):
-    now = datetime.datetime.now()
-    return ( now.hour - tweet.hour )*60 + (now.minute - tweet.minute)
+print("Getting Tweets...")
+
 
 
 def get_tweets(users):
@@ -30,11 +38,7 @@ def get_tweets(users):
         else: 
             since_id = db.most_recent_tweet.find_one({'screen_name' : screen_name})
             #print(since_id)
-<<<<<<< HEAD
-            if since_id is None or len(since_id) == 0:
-=======
             if len(since_id) == 0:
->>>>>>> 038dfd69eb19922a68b6e63cebd4a89d2f42f050
                 result = list(api.user_timeline(screen_name=screen_name, count=30)) 
             else:
                 result = list(api.user_timeline(screen_name=screen_name, count=30, since_id=since_id['id']))
@@ -60,13 +64,9 @@ def get_tweets(users):
             query = { 'username' : user['username'] }
             update = { 'username' : user['username'] , 'tweets' : dict(db_tweets) }
             db.tweets.update(query, update, upsert=True)
-            
-
-        time.sleep(SLEEP_TIME) 
+        
 
     
-if __name__ == '__main__': 
-    users = list(db.users.find({}))
-    while(1):
-        get_tweets(users)
+
+        
 

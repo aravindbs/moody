@@ -3,7 +3,10 @@ import yaml
 import json
 import sys
 import pymongo
-from __init__ import config, db
+from app.utils import config
+
+myclient = pymongo.MongoClient(config['mongodb']['MONGO_URI'])
+db = myclient.testmoody
 
 def get_token():
     url = 'https://accounts.spotify.com/api/token'
@@ -108,8 +111,3 @@ def spotify(users):
             db.music_suggestions.update(query, update, upsert=True)
         except: 
             pass 
-
-if __name__ == '__main__':
-    users = list(db.users.find({}))
-    while(1): 
-        spotify(users)
