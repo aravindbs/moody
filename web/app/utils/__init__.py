@@ -2,13 +2,17 @@ import json
 from app import mongo, APP_UTILS
 import os
 import datetime
-
+from app import config
 
 def get_chart_data (emotions, mood_color):
 
     datasets = {}
     for k, v in mood_color.items():
-        datasets[k] = {'label' : k, 'backgroundColor' : v, 'data' : [],  'fill' : False }
+        datasets[k] = {'label' : k, 
+                       'backgroundColor' : v, 
+                       'data' : [],  
+                       'fill' : False, 
+                       'borderColor' : v }
     labels = []
     emotions =  [
         {
@@ -79,8 +83,11 @@ def get_chart_data (emotions, mood_color):
         data.append(v)
     
     payload = { 'labels' : labels, 'datasets': data }
-
-    return payload
+    options = {}
+    with open(os.path.join(APP_UTILS, 'chart_options.json'), 'r') as f:
+        options = json.load (f)
+     
+    return { 'data' : payload, 'options' : options }
     
 
 

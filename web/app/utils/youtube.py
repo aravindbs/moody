@@ -3,11 +3,17 @@ import yaml,json
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import pymongo
-from __init__ import config, db 
+
+from app.utils import config
+
+myclient = pymongo.MongoClient(config['mongodb']['MONGO_URI'])
+db = myclient.testmoody
+
 
 DEVELOPER_KEY = config['youtube']['YOUTUBE_KEY']
 YOUTUBE_API_SERVICE_NAME = 'youtube'
 YOUTUBE_API_VERSION = 'v3'
+
 
 def youtube_search(users):
     	
@@ -89,9 +95,4 @@ def youtube_search(users):
 			update = { 'username' : user['username'] , 'suggestion' : all_suggestions }
 			db.video_suggestions.update(query, update, upsert=True)   
 		except: 
-			pass 
-
-if __name__ == '__main__':
-	users = list(db.users.find({}))
-	while(1):
-		youtube_search(users)
+			pass
