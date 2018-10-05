@@ -22,15 +22,13 @@ auth.set_access_token(config['twitter']['ACCESS_TOKEN'], config['twitter']['ACCE
 
 api = API(auth, wait_on_rate_limit = True)
 
-print("Getting Tweets...")
 
-
-
-def get_tweets(users):
+def get_tweets(user):
     print("hi")
     most_recent = list(db.most_recent_tweet.find({})) 
-    for user in users: 
-        screen_name = user['twitter_handle']
+    #for user in users: 
+    try: 
+        screen_name = user[0]['twitter_handle']
         print(screen_name)
         if most_recent and len(most_recent) == 0: 
             print("none")
@@ -63,11 +61,15 @@ def get_tweets(users):
                 (db_tweets[str(diff.days)]).append(tweets)
 
             print(db_tweets)
-            query = { 'username' : user['username'] }
-            update = { 'username' : user['username'] , 'tweets' : dict(db_tweets) }
+            query = { 'username' : user[0]['username'] }
+            update = { 'username' : user[0]['username'] , 'tweets' : dict(db_tweets) }
             db.tweets.update(query, update, upsert=True)
 
-return True  
+    except Exception as e: 
+        return e 
+
+
+    return True  
 
     
 

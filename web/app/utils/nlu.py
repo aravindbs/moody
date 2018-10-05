@@ -23,64 +23,66 @@ natural_language_understanding = NaturalLanguageUnderstandingV1(
   password=config['watson_nlu']['NLU_PASSWORD'],
   version=config['watson_nlu']['NLU_VERSION'])
 
-def nlu(users): 
+def nlu(user): 
+    print("nlu")
+    #print (list(users) )
     today = datetime.datetime.now()
     #tweets = list(db.tweets.find({}))
     
-    for user in users:
-        db_keywords = []
-        emotions = {}
-        all_emotions = []
-        print(user['username'])
-        anger = fear = disgust = joy = sadness = count = 0
-        tweets = db.tweets.find_one({'username' : user['username']})
+    #for user in users:
+    db_keywords = []
+    emotions = {}
+    all_emotions = []
+    print(user[0]['username'])
+    anger = fear = disgust = joy = sadness = count = 0
+    tweets = db.tweets.find_one({'username' : user[0]['username']})
+    #print(tweets)
+    try:
         #print(tweets)
-        try:
-            #print(tweets)
-            tweets.pop('_id', None)
-            tweets = tweets['tweets']
-            #print(type(tweets))
-            
-            for key in tweets: 
-                if int(key) < 30: 
-                    values = tweets[key]
-                    #print(values)
-                    anger = disgust = fear = joy = sadness = count = 0
-                    for tweet in values: 
-                        text = tweet['text']
-                        #time = tweet['created_at']
-                        tone = tone_analyzer.tone({'text': text},'application/json').get_result()
-                        if tone is None:
-                            continue 
-                        anger = anger + tone['document_tone']['tone_categories'][0]['tones'][0]['score']
-                        disgust = disgust + tone['document_tone']['tone_categories'][0]['tones'][1]['score']
-                        fear = fear + tone['document_tone']['tone_categories'][0]['tones'][2]['score']
-                        joy = joy + tone['document_tone']['tone_categories'][0]['tones'][3]['score']
-                        sadness = sadness + tone['document_tone']['tone_categories'][0]['tones'][4]['score']
-                        count = count + 1
-                    try:
-                        response = natural_language_understanding.analyze(text=text,features=Features(entities=EntitiesOptions(emotion=True,sentiment=True,limit=2),keywords=KeywordsOptions(emotion=True,sentiment=True,limit=5))).get_result()
-                    except: 
-                        continue
-                    keywords = response['keywords']
-                    for keyword in keywords: 
-                        db_keywords.append(keyword['text'])
-                    emotions = {}
-                    emotions['anger'] = anger = anger / count 
-                    emotions['disgust'] = disgust = disgust / count 
-                    emotions['fear'] = fear = fear / count 
-                    emotions['joy'] = joy = joy / count 
-                    emotions['sadness'] = sadness = sadness / count
-                    emotions['day'] = key
-                    #print(emotions['day'])
-                    all_emotions.append(emotions)
-                        
-                    #print(all_emotions)
-        except Exception as e:
-            print(e)   
-            pass        
-        query = { 'screen_name' : user['twitter_handle']}
-        update = { 'username' : user['username'] , 'screen_name' : user['twitter_handle'] , 'emotions' : all_emotions, 'keywords' : db_keywords }
-        db.emotions.update(query, update, upsert=True)
+        tweets.pop('_id', None)
+        tweets = tweets['tweets']
+        #print(type(tweets))
+        
+        for key in tweets: 
+            if int(key) < 30: 
+                values = tweets[key]
+                #print(values)
+                anger = disgust = fear = joy = sadness = count = 0
+                for tweet in values: 
+                    text = tweet['text']
+                    #time = tweet['created_at']
+                    tone = tone_analyzer.tone({'text': text},'application/json').get_result()
+                    if tone is None:
+                        continue 
+                    anger = anger + tone['document_tone']['tone_categories'][0]['tones'][0]['score']
+                    disgust = disgust + tone['document_tone']['tone_categories'][0]['tones'][1]['score']
+                    fear = fear + tone['document_tone']['tone_categories'][0]['tones'][2]['score']
+                    joy = joy + tone['document_tone']['tone_categories'][0]['tones'][3]['score']
+                    sadness = sadness + tone['document_tone']['tone_categories'][0]['tones'][4]['score']
+                    count = count + 1
+                try:
+                    response = natural_language_understanding.analyze(text=text,features=Features(entities=EntitiesOptions(emotion=True,sentiment=True,limit=2),keywords=KeywordsOptions(emotion=True,sentiment=True,limit=5))).get_result()
+                except: 
+                    continue
+                keywords = response['keywords']
+                for keyword in keywords: 
+                    db_keywords.append(keyword['text'])
+                emotions = {}
+                emotions['anger'] = anger = anger / count 
+                emotions['disgust'] = disgust = disgust / count 
+                emotions['fear'] = fear = fear / count 
+                emotions['joy'] = joy = joy / count 
+                emotions['sadness'] = sadness = sadness / count
+                emotions['day'] = key
+                #print(emotions['day'])
+                all_emotions.append(emotions)
+                    
+                print(all_emotions)
+    except Exception as e:
+        return e
+        pass        
+    query = { 'screen_name' : user[0]['twitter_handle']}
+    update = { 'username' : user[0]['username'] , 'screen_name' : user[0]['twitter_handle'] , 'emotions' : all_emotions, 'keywords' : db_keywords }
+    db.emotions.update(query, update, upsert=True)
 
-return True 
+    return True 
