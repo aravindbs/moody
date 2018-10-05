@@ -19,6 +19,7 @@
 
             </div>
             <div class="well">
+                {% if moods %}
                 <div class="moods">
                     <p class="font-medium"> Current Mood </p>
                     {% if moods %} {% for k,v in moods.items() %}
@@ -31,6 +32,9 @@
                     </div>
                     {% endfor %} {% endif %}
                 </div>
+                {% else %}
+                <p class="font-lightitalic"> Your current mood will be displayed here. Try again after sometime </p>
+                {% endif %}
             </div>
 
             {% with messages = get_flashed_messages() %} {% if messages %}
@@ -93,9 +97,10 @@
                     </div>
                 </div>
             </div>
+            {% if data %}
             <div class="col-sm-12 dash-element">
                 <div class="dash-header text-left">
-                    <h5> Analytics Graph</h5>
+                    <h5> Recent Moods </h5>
                 </div>
                 <div class="dash-body-graph">
                     <div style="width:100%;">
@@ -112,6 +117,7 @@
                     </script>
                 </div>
             </div>
+            {% endif %}
 
         </div>
     </div>

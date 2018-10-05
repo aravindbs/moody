@@ -14,16 +14,16 @@ def get_chart_data (emotions, mood_color):
                        'fill' : False, 
                        'borderColor' : v }
     labels = []
-    print (emotions)
-    for emotion in emotions:
-        try:
-            if emotion['day']:
-                labels.append(str(datetime.datetime.now().date() - datetime.timedelta(int(emotion['day']))))
-                for mood, value in emotion.items():
-                    if mood != 'day':
-                        datasets[mood]['data'].append(value * 100)
-        except:
-            pass
+    if emotions:
+        for emotion in emotions:
+            try:
+                if emotion['day']:
+                    labels.append(str(datetime.datetime.now().date() - datetime.timedelta(int(emotion['day']))))
+                    for mood, value in emotion.items():
+                        if mood != 'day':
+                            datasets[mood]['data'].append(value * 100)
+            except:
+                pass
 
 
     data = []

@@ -104,12 +104,16 @@ def preferences():
         genres = request.form.getlist('genres')
         update = { 'username' : current_user.username, 'langs' : langs, 'artists' : artists, 'genres' : genres }
         mongo.db.preferences.update ( query, update, upsert =True)
+        
+        user = mongo.db.users.find_one({'username' : current_user.username})
+        print(type(user))
+        _user = [user]
+        
+        if get_tweets(_user) is not True or nlu(_user) is not True or spotify(_user) is not True or youtube_search(_user) is not True:  
+            flash("Please try again.")
+            return redirect (url_for('preferences', user=current_user.username)) 
+        
         flash ('Preferences Updated')
-        user = mongo.db.users.find({'username' : current_user.username})
-        get_tweets(user)
-        nlu(user)
-        spotify(user)
-        youtube_search(user)
         return redirect (url_for('dashboard', user=current_user.username))
 
     preferences = mongo.db.preferences.find_one(query)
