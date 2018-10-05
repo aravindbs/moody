@@ -111,3 +111,5 @@ def spotify(users):
             db.music_suggestions.update(query, update, upsert=True)
         except: 
             pass 
+
+    return True 

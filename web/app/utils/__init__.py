@@ -14,69 +14,17 @@ def get_chart_data (emotions, mood_color):
                        'fill' : False, 
                        'borderColor' : v }
     labels = []
-    emotions =  [
-        {
-            "sadness": 0.419976,
-            "disgust": 0.206897,
-            "day": "3",
-            "anger": 0.528375,
-            "fear": 0.048348,
-            "joy": 0.058889
-        },
-        {
-            "sadness": 0.419976,
-            "disgust": 0.20689700000000003,
-            "day": "1",
-            "anger": 0.528375,
-            "fear": 0.048348,
-            "joy": 0.05888899999999999
-        },
-        {
-            "sadness": 0.419976,
-            "disgust": 0.20689700000000003,
-            "day": "5",
-            "anger": 0.528375,
-            "fear": 0.048348,
-            "joy": 0.05888899999999999
-        },
-        {
-            "sadness": 0.419976,
-            "disgust": 0.206897,
-            "day": "4",
-            "anger": 0.528375,
-            "fear": 0.048348,
-            "joy": 0.058889
-        },
-        {
-            "sadness": 0.41997600000000007,
-            "disgust": 0.20689700000000005,
-            "day": "6",
-            "anger": 0.528375,
-            "fear": 0.048348,
-            "joy": 0.05888899999999998
-        },
-        {
-            "sadness": 0.41997599999999996,
-            "disgust": 0.206897,
-            "day": "0",
-            "anger": 0.528375,
-            "fear": 0.048348,
-            "joy": 0.058889
-        },
-        {
-            "sadness": 0.41997600000000007,
-            "disgust": 0.20689700000000005,
-            "day": "2",
-            "anger": 0.528375,
-            "fear": 0.048348,
-            "joy": 0.05888899999999998
-        }
-    ]
+    print (emotions)
     for emotion in emotions:
-        labels.append(str(datetime.datetime.now().date() - datetime.timedelta(int(emotion['day']))))
-        for mood, value in emotion.items():
-            if mood != 'day':
-                datasets[mood]['data'].append(value * 100)
+        try:
+            if emotion['day']:
+                labels.append(str(datetime.datetime.now().date() - datetime.timedelta(int(emotion['day']))))
+                for mood, value in emotion.items():
+                    if mood != 'day':
+                        datasets[mood]['data'].append(value * 100)
+        except:
+            pass
+
 
     data = []
     for k, v in datasets.items():
@@ -122,3 +70,7 @@ def get_emoji ():
     with open (os.path.join(APP_UTILS, 'mood_to_emoji.json'), 'r') as f:
         return json.load(f)
 
+
+def get_signup_form():
+    with open (os.path.join(APP_UTILS, 'signup_form.json'), 'r') as f:
+        return json.load(f)

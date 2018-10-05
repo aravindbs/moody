@@ -6,9 +6,9 @@ from flask_login import login_user, login_required,current_user, logout_user,log
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.login import User
 import os
-from .utils import get_prefs, get_suggestions, get_mood_colors, get_emoji,get_chart_data
+from .utils import get_prefs, get_suggestions, get_mood_colors, get_emoji,get_chart_data, get_signup_form
 from app.utils.spotify import spotify
-from app.utils.tweet import get_tweets
+from app.utils.tweet import get_tweets,api
 from app.utils.youtube import youtube_search
 from app.utils.nlu import nlu
 
@@ -51,22 +51,48 @@ def logout():
 
 @app.route('/signup', methods= ['GET','POST'])
 def signup():
+  
     if request.method == 'POST':
         form_data = request.form.to_dict()
+        
         pwd = form_data['password']
         hashed_pwd = generate_password_hash(pwd)
         form_data['password'] = hashed_pwd
+
+        try : 
+            api.get_user(form_data['twitter_handle'])
+        
+        except Exception:
+            flash ('twiiter handle does not exist')
+            return redirect(url_for('signup'))
+
+        if form_data['repeat-password'] != form_data['password']:
+            flash ('Passwords do not match')
+            return redirect(url_for('signup'))
 
         if mongo.db.users.find_one({ 'email' : form_data['email']}) or mongo.db.users.find_one({ 'username' : form_data['username']}):
             flash("Username Exists, Try Again")
             print ('here')
             return redirect ( url_for('signup'))
         else :
-            mongo.db.users.insert_one(form_data)
+            mongo.db.users.update({ 'username' : form_data['username']},form_data, upsert= True)
             user = User (mongo.db.users.find_one({'username' : form_data['username']}) )
             login_user(user)
             return redirect (url_for('preferences', user=current_user.username))  
-    return render_template('signup.html',  title = 'Moody | Sign Up')
+
+    args = request.args
+    form = get_signup_form()
+    form_data = {}
+    if args:
+        user = args.get('user')
+        form_data = mongo.db.users.find_one({'username' : user})    
+        form_data.pop('password')
+        print (form_data)
+    return render_template('signup.html',  
+                            title = 'Moody | Sign Up', 
+                            form = form,
+                            form_data = form_data
+                            )
 
 @login_required
 @app.route('/preferences', methods= ['GET','POST'])
@@ -79,7 +105,7 @@ def preferences():
         update = { 'username' : current_user.username, 'langs' : langs, 'artists' : artists, 'genres' : genres }
         mongo.db.preferences.update ( query, update, upsert =True)
         flash ('Preferences Updated')
-        user = mongo.db.users.find_one({'username' : current_user.username})
+        user = mongo.db.users.find({'username' : current_user.username})
         get_tweets(user)
         nlu(user)
         spotify(user)
@@ -130,7 +156,7 @@ def dashboard (user):
     suggestions = get_suggestions(current_user.username)
     mood_color = get_mood_colors()
     emoji = get_emoji()
-    payload = get_chart_data(moods,mood_color)
+    payload = get_chart_data(emotions,mood_color)
     #payload = json.dumps(payload)
     print (payload)
     return render_template('dashboard.html', 

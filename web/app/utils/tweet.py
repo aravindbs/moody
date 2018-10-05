@@ -38,20 +38,22 @@ def get_tweets(users):
         else: 
             since_id = db.most_recent_tweet.find_one({'screen_name' : screen_name})
             #print(since_id)
-            if len(since_id) == 0:
+            if since_id is None:
                 result = list(api.user_timeline(screen_name=screen_name, count=30)) 
             else:
                 result = list(api.user_timeline(screen_name=screen_name, count=30, since_id=since_id['id']))
 
         if result: 
             query = { 'screen_name' : screen_name}
-            update = { 'screen_name' : screen_name, 'id' : result[0].id}
+            update = { 'screen_name' : screen_name, 'id' : result[0].id }
             db.most_recent_tweet.update(query, update, upsert=True)
         
             all_tweets = []
             tweets = {}
             db_tweets = defaultdict(list)
             for r in result: 
+                print("yes")
+                tweets = {}
                 tweets['screen_name'] = screen_name
                 tweets['tweet_id'] = r.id
                 tweets['created_at'] = r.created_at 
@@ -64,7 +66,8 @@ def get_tweets(users):
             query = { 'username' : user['username'] }
             update = { 'username' : user['username'] , 'tweets' : dict(db_tweets) }
             db.tweets.update(query, update, upsert=True)
-        
+
+    return True  
 
     
 

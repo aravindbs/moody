@@ -3,7 +3,6 @@ import yaml,json
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import pymongo
-
 from app.utils import config
 
 myclient = pymongo.MongoClient(config['mongodb']['MONGO_URI'])
@@ -96,3 +95,5 @@ def youtube_search(users):
 			db.video_suggestions.update(query, update, upsert=True)   
 		except: 
 			pass
+
+	return True 
