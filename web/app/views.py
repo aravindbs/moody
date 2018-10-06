@@ -1,7 +1,7 @@
 from app import app
 from app import mongo
-from flask import Flask, render_template,request, Response, url_for,flash, redirect
-from flask_login import login_user, login_required,current_user, logout_user,login_manager
+from flask import Flask, render_template, request, Response, url_for, flash, redirect
+from flask_login import login_user, login_required, current_user, logout_user, login_manager
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.login import User
 import os
@@ -15,31 +15,32 @@ GENRES = ['']
 
 @app.route('/')
 def index():
-    if current_user.is_authenticated :
-        return redirect (url_for('dashboard', user=current_user.username))
-    
-    return render_template('index.html', title = 'Moody | Home')
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard', user=current_user.username))
+    return render_template('index.html',
+                           title='Moody | Home')
 
-@app.route('/login', methods = ['GET', 'POST'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         login_data = request.form.to_dict()
-        print (login_data)
-        user = mongo.db.users.find_one({'email' : login_data['email']})
-        print (user)
+        print(login_data)
+        user = mongo.db.users.find_one({'email': login_data['email']})
+        print(user)
         if user:
             if check_password_hash(user['password'], login_data['password']):
                 user_obj = User(user)
-                login_user (user_obj)
+                login_user(user_obj)
                 flash('Login Successful')
-                return redirect(url_for('dashboard', user= user['username']))
+                return redirect(url_for('dashboard', user=user['username']))
             else:
                 flash("Incorrect Password")
-                return redirect (url_for('login'))
+                return redirect(url_for('login'))
         else:
             flash("Invalid Username. Try Again")
-            return redirect (url_for('login'))
-    return render_template ('login.html',  title = 'Moody | Login')
+            return redirect(url_for('login'))
+    return render_template('login.html',
+                           title='Moody | Login')
 
 @app.route('/logout')
 @login_required
@@ -48,7 +49,8 @@ def logout():
     flash('You have logged out.')
     return redirect(url_for('login'))
 
-@app.route('/signup', methods= ['GET','POST'])
+
+@app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
         form_data = request.form.to_dict()
@@ -56,21 +58,25 @@ def signup():
         hashed_pwd = generate_password_hash(pwd)
         form_data['password'] = hashed_pwd
 
-        if mongo.db.users.find_one({ 'email' : form_data['email']}) or mongo.db.users.find_one({ 'username' : form_data['username']}):
+        if mongo.db.users.find_one({'email': form_data['email']}) or mongo.db.users.find_one({'username': form_data['username']}):
             flash("Username Exists, Try Again")
-            print ('here')
-            return redirect ( url_for('signup'))
-        else :
+            print('here')
+            return redirect(url_for('signup'))
+        else:
             mongo.db.users.insert_one(form_data)
-            user = User (mongo.db.users.find_one({'username' : form_data['username']}) )
+            user = User(mongo.db.users.find_one(
+                {'username': form_data['username']}))
             login_user(user)
-            return redirect (url_for('preferences', user=current_user.username))  
-    return render_template('signup.html',  title = 'Moody | Sign Up')
+            return redirect(url_for('preferences',
+                                    user=current_user.username))
+    return render_template('signup.html',
+                           title='Moody | Sign Up')
 
 @login_required
-@app.route('/preferences', methods= ['GET','POST'])
-def preferences(): 
-    query = { 'username' : current_user.username }
+@app.route('/preferences', methods=['GET', 'POST'])
+def preferences():
+    
+    query = {'username': current_user.username}
     if request.method == 'POST':
         artists = request.form.getlist('artists')
         langs = request.form.getlist('langs')
@@ -91,7 +97,7 @@ def preferences():
 
     preferences = mongo.db.preferences.find_one(query)
     pref_list = get_prefs()
-    langs_values =[]
+    langs_values = []
     artists_values = []
     genres_values = []
     if preferences:
@@ -101,37 +107,49 @@ def preferences():
             artists_values = preferences['artists']
         except KeyError:
             pass
-    return render_template('preferences.html',  title = 'Moody | Edit Prefs',pref_list = pref_list, genres_values = genres_values, langs_values =langs_values , artists_values = artists_values)
+    return render_template('preferences.html',
+                           title='Moody | Edit Prefs',
+                           pref_list=pref_list,
+                           genres_values=genres_values,
+                           langs_values=langs_values,
+                           artists_values=artists_values)
 
 @login_required
 @app.route('/dashboard/<user>')
-def dashboard (user):
-    profile = mongo.db.users.find_one({'email' : current_user.email })
-    emotions = mongo.db.emotions.find_one({'username' : current_user.username})
+def dashboard(user):
+    profile = mongo.db.users.find_one({'email': current_user.email})
+    emotions = mongo.db.emotions.find_one({'username': current_user.username})
     cur_emotion = {}
+   # chart_data = {}
     if emotions:
         emotions = dict(emotions)
-        emotions = emotions['emotions'] #list 
-       
-        for emotion in emotions: 
-            for k,v in emotion.items():
-                if k == 'day' and v == '0': 
+        emotions = emotions['emotions']  # list
+        chart_data = emotions
+        for emotion in emotions:
+            for k, v in emotion.items():
+                if k == 'day' and v == '0':
                     cur_emotion = emotion
-                    break 
+                    break
     moods = cur_emotion
     moods.pop('day', None)
-
     if emotions:
         for k, v in moods.items():
             if type(v) is float:
-                moods[k] = float (v) * 100     
+                moods[k] = float(v) * 100
     suggestions = get_suggestions(current_user.username)
     mood_color = get_mood_colors()
     emoji = get_emoji()
-    return render_template('dashboard.html', title = 'Moody | {}'.format(profile['first_name']), user=user, profile = dict(profile), moods = moods, mood_color = mood_color, emoji = emoji ,suggestions=suggestions)
-
-
-
+    chart_payload = get_chart_data(moods, mood_color)
+    return render_template('dashboard.html',
+                           title='Moody | {}'.format(profile['first_name']),
+                           payload=chart_payload[0],
+                           chart_options=chart_payload[1],
+                           user=user,
+                           profile=dict(profile),
+                           moods=moods,
+                           mood_color=mood_color,
+                           emoji=emoji,
+                           suggestions=suggestions)
 
 #######Prevents cacehing of static files in the browser#######
 @app.context_processor

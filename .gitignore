@@ -8,6 +8,7 @@ test.json
 client_secrets.json 
 blogger.dat
 env_set.py
+blogger.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

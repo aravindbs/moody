@@ -29,6 +29,55 @@ def nlu(users):
         all_emotions = []
         print(user['username'])
         anger = fear = disgust = joy = sadness = count = 0
+<<<<<<< HEAD
+        tweets = db.tweets.find({'username' : user['username']})
+        print(list(tweets))
+        if list(tweets) is not []: 
+            try:
+                tweets = dict(list(tweets)[0])
+                #print(tweets)
+                tweets.pop('_id', None)
+                tweets = tweets['tweets']
+                #print(type(tweets))
+                
+                for key in tweets: 
+                    if int(key) < 30: 
+                        values = tweets[key]
+                        #print(values)
+                        anger = disgust = fear = joy = sadness = count = 0
+                        for tweet in values: 
+                            text = tweet['text']
+                            #time = tweet['created_at']
+                            tone = tone_analyzer.tone({'text': text},'application/json').get_result()
+                            if tone is None:
+                                continue 
+                            anger = anger + tone['document_tone']['tone_categories'][0]['tones'][0]['score']
+                            disgust = disgust + tone['document_tone']['tone_categories'][0]['tones'][1]['score']
+                            fear = fear + tone['document_tone']['tone_categories'][0]['tones'][2]['score']
+                            joy = joy + tone['document_tone']['tone_categories'][0]['tones'][3]['score']
+                            sadness = sadness + tone['document_tone']['tone_categories'][0]['tones'][4]['score']
+                            count = count + 1
+                        try:
+                            response = natural_language_understanding.analyze(text=text,features=Features(entities=EntitiesOptions(emotion=True,sentiment=True,limit=2),keywords=KeywordsOptions(emotion=True,sentiment=True,limit=5))).get_result()
+                        except: 
+                            continue
+                        keywords = response['keywords']
+                        for keyword in keywords: 
+                            db_keywords.append(keyword['text'])
+                        emotions = {}
+                        emotions['anger'] = anger = anger / count 
+                        emotions['disgust'] = disgust = disgust / count 
+                        emotions['fear'] = fear = fear / count 
+                        emotions['joy'] = joy = joy / count 
+                        emotions['sadness'] = sadness = sadness / count
+                        emotions['day'] = key
+                        #print(emotions['day'])
+                        all_emotions.append(emotions)
+                            
+                        #print(all_emotions)
+            except: 
+                pass             
+=======
         tweets = db.tweets.find_one({'username' : user['username']})
         #print(tweets)
         try:
@@ -75,6 +124,7 @@ def nlu(users):
         except Exception as e:
             print(e)   
             pass        
+>>>>>>> 038dfd69eb19922a68b6e63cebd4a89d2f42f050
         query = { 'screen_name' : user['twitter_handle']}
         update = { 'username' : user['username'] , 'screen_name' : user['twitter_handle'] , 'emotions' : all_emotions, 'keywords' : db_keywords }
         db.emotions.update(query, update, upsert=True)
