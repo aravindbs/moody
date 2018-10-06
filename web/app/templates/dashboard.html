@@ -50,7 +50,7 @@
 
         </div>
         <div class="col-sm-9">
-            
+            {% if suggestions['music'] %}
             <div class="col-sm-6 dash-element">
                 <div class="dash-header text-left">
                     <h5> Music Suggestions </h5>
@@ -63,6 +63,8 @@
                     {% endfor %}
                 </div>
             </div>
+            {% endif %}
+            {% if suggestions['video'] %}
             <div class="col-sm-6 dash-element">
                 <div class="dash-header text-left">
                     <h5> Video Suggestions</h5>
@@ -97,6 +99,7 @@
                     </div>
                 </div>
             </div>
+            {% endif %}
             {% if data %}
             <div class="col-sm-12 dash-element">
                 <div class="dash-header text-left">

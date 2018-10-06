@@ -69,7 +69,7 @@ def spotify(user):
                 break 
         if curr_emotion == None: 
             pass
-        print(curr_emotion)
+     #   print(curr_emotion)
         
         sadness = curr_emotion['sadness']
         anger = curr_emotion['anger'] 
@@ -98,10 +98,10 @@ def spotify(user):
         for track in tracks: 
             suggest['name'] = track['name']
             url = track['external_urls']['spotify']
-            print(url)
+           # print(url)
             index = url.find('/track') 
             url = url[:index] + '/embed' + url[index:]
-            print(url)
+           # print(url)
             suggest['url'] = url
             suggest['artist'] = track['artists'][0]['name']
             all_suggestions.append(suggest)

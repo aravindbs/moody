@@ -24,16 +24,21 @@ def get_tweets(users):
     for user in users: 
         screen_name = user['twitter_handle']
         print(screen_name)
-        if most_recent and len(most_recent) == 0: 
-            print("none")
-            result = list(api.user_timeline(screen_name=screen_name, count=30))
-        else: 
-            since_id = db.most_recent_tweet.find_one({'screen_name' : screen_name})
-            #print(since_id)
-            if since_id is None or len(since_id) == 0:
-                result = list(api.user_timeline(screen_name=screen_name, count=30)) 
-            else:
-                result = list(api.user_timeline(screen_name=screen_name, count=30, since_id=since_id['id']))
+        try:
+            if most_recent and len(most_recent) == 0: 
+                print("none")
+                result = list(api.user_timeline(screen_name=screen_name, count=10))
+            else: 
+                since_id = db.most_recent_tweet.find_one({'screen_name' : screen_name})
+                #print(since_id)
+                if since_id is None or len(since_id) == 0:
+                    result = list(api.user_timeline(screen_name=screen_name, count=30)) 
+                else:
+                    result = list(api.user_timeline(screen_name=screen_name, count=30, since_id=since_id['id']))
+        except Exception as e:
+            print (str(e))
+            pass
+
 
         if result: 
             query = { 'screen_name' : screen_name}

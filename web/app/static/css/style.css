@@ -29,23 +29,30 @@ html {
 div.welcome h1{
     font-size: 50px;
 }
-div.features {
+
+
+div.features-bg {
     background-color: #222;
-    color: white;
-    height: 70%;
-    padding: 2%;
-    margin: 10px;
     border-radius: 10px;
-    opacity: 0.9;
+    opacity: 0.8;
+    margin: 2%;
+    margin-top:10%;
+    min-height: 50%;
+}
+
+div.features {
+    color: white;
+    padding: 10%;
 }
 
 div.features .glyphicon {
+   margin :2%;
    font-size: 30px; 
 }
 
 div.features p {
     margin: 20px;
-    font-size : 25px;
+    font-size : 20px;
     font-family: Ubuntu-LI;
 }
 
@@ -138,12 +145,14 @@ label, button{
     padding: 0%;
     border-radius: 5px;
     overflow: scroll;
+    margin-bottom : 20px;
 }
 
 .dash-body-graph {
     min-height: 40%;
     background-color: white !important;
     margin-right: 10px;
+    margin-bottom : 20px;
     padding: 0%;
     border-radius: 5px;
 }
@@ -153,6 +162,7 @@ label, button{
     margin-right: 10px;
     padding: 0%;
     border-radius: 5px;
+    margin-bottom : 20px;
 }
 .dash-element {
    

@@ -59,19 +59,19 @@ def signup():
         
         pwd = form_data['password']
         hashed_pwd = generate_password_hash(pwd)
-        form_data['password'] = hashed_pwd
+       
 
         try : 
             api.get_user(form_data['twitter_handle'])
         
-        except Exception:
-            flash ('Twitter handle does not exist')
+        except Exception as e:
+            flash ('Twitter handle does not exist\n'+ str(e))
             return redirect(url_for('signup'))
 
         if form_data['repeat-password'] != form_data['password']:
             flash ('Passwords do not match')
             return redirect(url_for('signup'))
-
+        form_data['password'] = hashed_pwd
         if mongo.db.users.find_one({ 'email' : form_data['email']}) or mongo.db.users.find_one({ 'username' : form_data['username']}):
             flash("Username Exists, Try Again")
             print ('here')
@@ -146,28 +146,28 @@ def dashboard(user):
     profile = mongo.db.users.find_one({'email': current_user.email})
     emotions = mongo.db.emotions.find_one({'username': current_user.username})
     cur_emotion = {}
-   # chart_data = {}
     if emotions:
         emotions = dict(emotions)
         emotions = emotions['emotions']  # list
-        chart_data = emotions
         for emotion in emotions:
             for k, v in emotion.items():
                 if k == 'day' and v == '0':
                     cur_emotion = emotion
                     break
     moods = cur_emotion
-    moods.pop('day', None)
     if emotions:
         for k, v in moods.items():
             if type(v) is float:
                 moods[k] = float(v) * 100
     suggestions = get_suggestions(current_user.username)
+    #print ( suggestions )
     mood_color = get_mood_colors()
     emoji = get_emoji()
+   # print (chart_data)
     payload = get_chart_data(emotions,mood_color)
     #payload = json.dumps(payload)
-    print (payload)
+   # print (payload)
+    moods.pop('day', None)
     return render_template('dashboard.html', 
                             title = 'Moody | {}'.format(profile['first_name']), 
                             payload= payload, 
