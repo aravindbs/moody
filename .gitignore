@@ -10,6 +10,8 @@ blogger.dat
 env_set.py
 blogger.py
 .cfignore
+manifest.yml
+runtime.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
