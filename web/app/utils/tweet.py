@@ -24,14 +24,14 @@ api = API(auth, wait_on_rate_limit = True)
 
 
 def get_tweets(user):
-    print("hi")
+   # print("hi")
     most_recent = list(db.most_recent_tweet.find({})) 
     #for user in users: 
     try: 
         screen_name = user[0]['twitter_handle']
         print(screen_name)
         if most_recent and len(most_recent) == 0: 
-            print("none")
+          #  print("none")
             result = list(api.user_timeline(screen_name=screen_name, count=10))
         else: 
             since_id = db.most_recent_tweet.find_one({'screen_name' : screen_name})
@@ -50,7 +50,7 @@ def get_tweets(user):
             tweets = {}
             db_tweets = defaultdict(list)
             for r in result: 
-                print("yes")
+               # print("yes")
                 tweets = {}
                 tweets['screen_name'] = screen_name
                 tweets['tweet_id'] = r.id
@@ -60,7 +60,7 @@ def get_tweets(user):
                 
                 (db_tweets[str(diff.days)]).append(tweets)
 
-            print(db_tweets)
+           # print(db_tweets)
             query = { 'username' : user[0]['username'] }
             update = { 'username' : user[0]['username'] , 'tweets' : dict(db_tweets) }
             db.tweets.update(query, update, upsert=True)
