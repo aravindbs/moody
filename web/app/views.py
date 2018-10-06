@@ -65,7 +65,7 @@ def signup():
             api.get_user(form_data['twitter_handle'])
         
         except Exception:
-            flash ('twiiter handle does not exist')
+            flash ('Twitter handle does not exist')
             return redirect(url_for('signup'))
 
         if form_data['repeat-password'] != form_data['password']:

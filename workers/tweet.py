@@ -26,7 +26,7 @@ def get_tweets(users):
         print(screen_name)
         if most_recent and len(most_recent) == 0: 
             print("none")
-            result = list(api.user_timeline(screen_name=screen_name, count=10))
+            result = list(api.user_timeline(screen_name=screen_name, count=30))
         else: 
             since_id = db.most_recent_tweet.find_one({'screen_name' : screen_name})
             #print(since_id)
