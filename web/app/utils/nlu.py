@@ -68,11 +68,11 @@ def nlu(user):
                 for keyword in keywords: 
                     db_keywords.append(keyword['text'])
                 emotions = {}
-                emotions['anger'] = anger = anger / count 
-                emotions['disgust'] = disgust = disgust / count 
-                emotions['fear'] = fear = fear / count 
-                emotions['joy'] = joy = joy / count 
-                emotions['sadness'] = sadness = sadness / count
+                emotions['anger'] = anger / count 
+                emotions['disgust'] = disgust / count 
+                emotions['fear'] = fear / count 
+                emotions['joy'] = joy / count 
+                emotions['sadness'] = sadness / count
                 emotions['day'] = key
                 #print(emotions['day'])
                 all_emotions.append(emotions)

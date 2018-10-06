@@ -28,10 +28,5 @@
         "name": "last_name",
         "label": "Last Name",
         "type" : "text"
-    },
-    {
-        "name": "twitter_handle",
-        "label": "Twitter Handle : @",
-        "type": "text"
     }
 ]

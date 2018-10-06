@@ -21,6 +21,7 @@ def get_chart_data (emotions, mood_color):
                     labels.append(str(datetime.datetime.now().date() - datetime.timedelta(int(emotion['day']))))
                     for mood, value in emotion.items():
                         if mood != 'day':
+                           # print (value)
                             datasets[mood]['data'].append(value * 100)
             except:
                 pass
@@ -29,7 +30,7 @@ def get_chart_data (emotions, mood_color):
     data = []
     for k, v in datasets.items():
         data.append(v)
-    
+    data.reverse()
     payload = { 'labels' : labels, 'datasets': data }
     options = {}
     with open(os.path.join(APP_UTILS, 'chart_options.json'), 'r') as f:
