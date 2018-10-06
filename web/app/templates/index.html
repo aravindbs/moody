@@ -2,15 +2,39 @@
 {% block body %}
 <div class="container-fluid text-center main-body">
         <div class="row content">
-            <div class="col-sm-12 text-center">
+                {% if current_user.is_authenticated %}
+                <div class="col-sm-12 text-center welcome">
+            
+                        <h1> Hello {{ current_user.username }}!</h1>
+                    </div>
+                {% else %}
+            <div class="col-sm-12 text-center welcome">
+            
                 <h1> Welcome to Moody!</h1>
             </div>
-            <div class="container-fluid">
                 <div>
                     <a href="{{ url_for('signup') }}" class="btn btn-info"> Sign up</a>
                     <a href="{{ url_for('login') }}" class="btn btn-info"> Login </a>
                 </div>
+            {% endif %}
+            <div class="col-sm-4 features text-center">
+                <div >
+                        <span class="glyphicons glyphicons-chat"></span>
+                </div>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.
             </div>
+            <div class="col-sm-4 features text-center">
+                    <div>
+                            <span class="glyphicon glyphicon-music"></span>
+                    </div>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.
+                </div>
+                <div class="col-sm-4 features text-center">
+                        <div >
+                                <span class="glyphicon glyphicon-facetime-video"></span>
+                        </div>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.
+                    </div>
         </div>
     </div>
 {% endblock %}

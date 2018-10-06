@@ -1,21 +1,45 @@
 import json
 from app import mongo, APP_UTILS
 import os
-from dotenv import load_dotenv
-load_dotenv(dotenv_path=".env")
-def load_config ():
-    with open("config.json", "r") as f:
-       # load_dotenv()
-        #os.system('pwd')
-        config = json.load(f)
-        for key, value in config.items():
-            for _key, _value in value.items():
-                value[_key] = os.environ[_key]
-               # print (value[_key])
-        return config
+import datetime
+from app import config
 
-config = load_config()
+def get_chart_data (emotions, mood_color):
 
+    datasets = {}
+    for k, v in mood_color.items():
+        datasets[k] = {'label' : k, 
+                       'backgroundColor' : v, 
+                       'data' : [],  
+                       'fill' : False, 
+                       'borderColor' : v }
+    labels = []
+    if emotions:
+        for emotion in emotions:
+            try:
+                if emotion['day']:
+                    labels.append(str(datetime.datetime.now().date() - datetime.timedelta(int(emotion['day']))))
+                    for mood, value in emotion.items():
+                        if mood != 'day':
+                            datasets[mood]['data'].append(value * 100)
+            except:
+                pass
+
+
+    data = []
+    for k, v in datasets.items():
+        data.append(v)
+    
+    payload = { 'labels' : labels, 'datasets': data }
+    options = {}
+    with open(os.path.join(APP_UTILS, 'chart_options.json'), 'r') as f:
+        options = json.load (f)
+     
+    return { 'data' : payload, 'options' : options }
+    
+
+
+    
 def get_prefs():
     with open(os.path.join(APP_UTILS, 'lists.json'), 'r') as f:
         pref_list = json.load (f)
@@ -44,4 +68,9 @@ def get_mood_colors ():
     
 def get_emoji ():
     with open (os.path.join(APP_UTILS, 'mood_to_emoji.json'), 'r') as f:
+        return json.load(f)
+
+
+def get_signup_form():
+    with open (os.path.join(APP_UTILS, 'signup_form.json'), 'r') as f:
         return json.load(f)

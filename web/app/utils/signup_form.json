@@ -1,0 +1,30 @@
+[
+    {
+        "name": "email",
+        "label": "Email ID"
+    },
+    {
+        "name": "password",
+        "label": "Password"
+    },
+    {
+        "name": "repeat-password",
+        "label": "Repeat Password"
+    },
+    {
+        "name": "username",
+        "label": "Username"
+    },
+    {
+        "name": "first_name",
+        "label": "First Name"
+    },
+    {
+        "name": "last_name",
+        "label": "Last Name"
+    },
+    {
+        "name": "twitter_handle",
+        "label": "Twitter Handle : @"
+    }
+]

@@ -9,12 +9,45 @@ body {
     /* Center and scale the image nicely */
     background-position: center;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: auto;
+    background-attachment: fixed;
 }
 html {
     height: 100%;
 }
 
+.btn-info {
+    background-color:#222;
+    border-color: #222;
+}
+.btn-info:hover {
+    background-color: white;
+    border-color : white;
+    color: #222;
+}
+
+div.welcome h1{
+    font-size: 50px;
+}
+div.features {
+    background-color: #222;
+    color: white;
+    height: 70%;
+    padding: 2%;
+    margin: 10px;
+    border-radius: 10px;
+    opacity: 0.9;
+}
+
+div.features .glyphicon {
+   font-size: 30px; 
+}
+
+div.features p {
+    margin: 20px;
+    font-size : 25px;
+    font-family: Ubuntu-LI;
+}
 
 .main-body {
     min-height: 0%;
@@ -105,6 +138,14 @@ label, button{
     padding: 0%;
     border-radius: 5px;
     overflow: scroll;
+}
+
+.dash-body-graph {
+    min-height: 40%;
+    background-color: white !important;
+    margin-right: 10px;
+    padding: 0%;
+    border-radius: 5px;
 }
 .dash-body-video {
     height: 40%;

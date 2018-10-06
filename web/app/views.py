@@ -1,14 +1,15 @@
 from app import app
 from app import mongo
-from flask import Flask, render_template, request, Response, url_for, flash, redirect
-from flask_login import login_user, login_required, current_user, logout_user, login_manager
+from app import config
+from flask import Flask, render_template,request, Response, url_for,flash, redirect
+from flask_login import login_user, login_required,current_user, logout_user,login_manager
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.login import User
 import os
-from .utils import get_prefs, get_suggestions, get_mood_colors, get_emoji
+from .utils import get_prefs, get_suggestions, get_mood_colors, get_emoji,get_chart_data, get_signup_form
 from app.utils.spotify import spotify
-from app.utils.tweet import get_tweets
-from app.utils.youtube import youtube_search    
+from app.utils.tweet import get_tweets,api
+from app.utils.youtube import youtube_search
 from app.utils.nlu import nlu
 
 GENRES = ['']
@@ -52,25 +53,50 @@ def logout():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+  
     if request.method == 'POST':
         form_data = request.form.to_dict()
+        
         pwd = form_data['password']
         hashed_pwd = generate_password_hash(pwd)
         form_data['password'] = hashed_pwd
 
-        if mongo.db.users.find_one({'email': form_data['email']}) or mongo.db.users.find_one({'username': form_data['username']}):
-            flash("Username Exists, Try Again")
-            print('here')
+        try : 
+            api.get_user(form_data['twitter_handle'])
+        
+        except Exception:
+            flash ('twiiter handle does not exist')
             return redirect(url_for('signup'))
-        else:
-            mongo.db.users.insert_one(form_data)
-            user = User(mongo.db.users.find_one(
-                {'username': form_data['username']}))
+
+        if form_data['repeat-password'] != form_data['password']:
+            flash ('Passwords do not match')
+            return redirect(url_for('signup'))
+
+        if mongo.db.users.find_one({ 'email' : form_data['email']}) or mongo.db.users.find_one({ 'username' : form_data['username']}):
+            flash("Username Exists, Try Again")
+            print ('here')
+            return redirect ( url_for('signup'))
+        else :
+            mongo.db.users.update({ 'username' : form_data['username']},form_data, upsert= True)
+            user = User (mongo.db.users.find_one({'username' : form_data['username']}) )
             login_user(user)
-            return redirect(url_for('preferences',
-                                    user=current_user.username))
-    return render_template('signup.html',
-                           title='Moody | Sign Up')
+            return redirect (url_for('preferences', user=current_user.username))  
+
+    args = request.args
+    form = get_signup_form()
+    form_data = {}
+    title = 'Moody | Sign Up'
+    if args:
+        title = 'Moody | Edit Profile'
+        user = args.get('user')
+        form_data = mongo.db.users.find_one({'username' : user})    
+        form_data.pop('password')
+        print (form_data)
+    return render_template('signup.html',  
+                            title = title, 
+                            form = form,
+                            form_data = form_data
+                            )
 
 @login_required
 @app.route('/preferences', methods=['GET', 'POST'])
@@ -82,12 +108,16 @@ def preferences():
         genres = request.form.getlist('genres')
         update = { 'username' : current_user.username, 'langs' : langs, 'artists' : artists, 'genres' : genres }
         mongo.db.preferences.update ( query, update, upsert =True)
-        flash ('Preferences Updated')
+        
         user = mongo.db.users.find_one({'username' : current_user.username})
-        get_tweets(user)
-        nlu(user)
-        spotify(user)
-        youtube(user)
+        print(type(user))
+        _user = [user]
+        
+        if get_tweets(_user) is not True or nlu(_user) is not True or spotify(_user) is not True or youtube_search(_user) is not True:  
+            flash("Please try again.")
+            return redirect (url_for('preferences', user=current_user.username)) 
+        
+        flash ('Preferences Updated')
         return redirect (url_for('dashboard', user=current_user.username))
 
     preferences = mongo.db.preferences.find_one(query)
@@ -102,12 +132,12 @@ def preferences():
             artists_values = preferences['artists']
         except KeyError:
             pass
-    return render_template('preferences.html',
-                           title='Moody | Edit Prefs',
-                           pref_list=pref_list,
-                           genres_values=genres_values,
-                           langs_values=langs_values,
-                           artists_values=artists_values)
+    return render_template('preferences.html',  
+                            title = 'Moody | Edit Prefs',
+                            pref_list = pref_list, 
+                            genres_values = genres_values, 
+                            langs_values =langs_values ,
+                            artists_values = artists_values)
 
 @login_required
 @app.route('/dashboard/<user>')
@@ -134,17 +164,23 @@ def dashboard(user):
     suggestions = get_suggestions(current_user.username)
     mood_color = get_mood_colors()
     emoji = get_emoji()
-    chart_payload = get_chart_data(moods, mood_color)
-    return render_template('dashboard.html',
-                           title='Moody | {}'.format(profile['first_name']),
-                           payload=chart_payload[0],
-                           chart_options=chart_payload[1],
-                           user=user,
-                           profile=dict(profile),
-                           moods=moods,
-                           mood_color=mood_color,
-                           emoji=emoji,
-                           suggestions=suggestions)
+    payload = get_chart_data(emotions,mood_color)
+    #payload = json.dumps(payload)
+    print (payload)
+    return render_template('dashboard.html', 
+                            title = 'Moody | {}'.format(profile['first_name']), 
+                            payload= payload, 
+                            user=user, 
+                            profile = dict(profile), 
+                            moods = moods, 
+                            mood_color = mood_color, 
+                            emoji = emoji ,
+                            suggestions=suggestions,
+                            data = payload['data'],
+                            options = payload['options'])
+
+
+
 
 #######Prevents cacehing of static files in the browser#######
 @app.context_processor

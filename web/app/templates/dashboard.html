@@ -19,6 +19,7 @@
 
             </div>
             <div class="well">
+                {% if moods %}
                 <div class="moods">
                     <p class="font-medium"> Current Mood </p>
                     {% if moods %} {% for k,v in moods.items() %}
@@ -31,6 +32,9 @@
                     </div>
                     {% endfor %} {% endif %}
                 </div>
+                {% else %}
+                <p class="font-lightitalic"> Your current mood will be displayed here. Try again after sometime </p>
+                {% endif %}
             </div>
 
             {% with messages = get_flashed_messages() %} {% if messages %}
@@ -46,6 +50,7 @@
 
         </div>
         <div class="col-sm-9">
+            
             <div class="col-sm-6 dash-element">
                 <div class="dash-header text-left">
                     <h5> Music Suggestions </h5>
@@ -92,12 +97,13 @@
                     </div>
                 </div>
             </div>
-             <div class="col-sm-12 dash-element">
+            {% if data %}
+            <div class="col-sm-12 dash-element">
                 <div class="dash-header text-left">
-                    <h5> Analytics Graph</h5>
+                    <h5> Recent Moods </h5>
                 </div>
-                <div class="dash-body">
-                    <div style="width:75%;">
+                <div class="dash-body-graph">
+                    <div style="width:100%;">
                         <canvas id="canvas"></canvas>
                     </div>
                     <script>
@@ -105,12 +111,13 @@
                         var ctx = document.getElementById("canvas").getContext('2d');
                         var myLineChart = new Chart(ctx, {
                             type: 'line',
-                            data: {{ payload| tojson | safe }}
-                        ,options: {{ chart_options|tojson|safe }}
+                            data: {{ data| tojson | safe }}
+                        ,options: {{ options| tojson | safe }}
                                 });
                     </script>
                 </div>
             </div>
+            {% endif %}
 
         </div>
     </div>
