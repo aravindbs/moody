@@ -101,6 +101,7 @@ def signup():
 @login_required
 @app.route('/preferences', methods=['GET', 'POST'])
 def preferences():
+    
     query = {'username': current_user.username}
     if request.method == 'POST':
         artists = request.form.getlist('artists')
