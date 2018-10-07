@@ -70,4 +70,3 @@ if __name__ == '__main__':
     users = list(db.users.find({}))
     while(1):
         get_tweets(users)
-
