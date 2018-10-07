@@ -59,15 +59,7 @@ def signup():
         
         pwd = form_data['password']
         hashed_pwd = generate_password_hash(pwd)
-       
-
-        try : 
-            api.get_user(form_data['twitter_handle'])
-        
-        except Exception as e:
-            flash ('Twitter handle does not exist\n'+ str(e))
-            return redirect(url_for('signup'))
-
+    
         if form_data['repeat-password'] != form_data['password']:
             flash ('Passwords do not match')
             return redirect(url_for('signup'))
@@ -107,9 +99,22 @@ def preferences():
         artists = request.form.getlist('artists')
         langs = request.form.getlist('langs')
         genres = request.form.getlist('genres')
+        twitter = request.form.get('twitter_handle')
+        blogger = request.form.get('blogger_handle')
         update = { 'username' : current_user.username, 'langs' : langs, 'artists' : artists, 'genres' : genres }
-        mongo.db.preferences.update ( query, update, upsert =True)
+       
+
+        try : 
+            api.get_user(twitter)
         
+        except Exception as e:
+            flash ('twiiter handle does not exist\n'+ str(e))
+            return redirect(url_for('preferences'))
+        mongo.db.preferences.update ( query, update, upsert =True)
+        profile = mongo.db.users.find_one (query)
+        profile['twitter_handle'] = twitter
+        profile['blogger_handle'] = blogger
+        mongo.db.users.update (query, profile, upsert = True)
         user = mongo.db.users.find_one({'username' : current_user.username})
         print(type(user))
         _user = [user]
@@ -121,11 +126,20 @@ def preferences():
         flash ('Preferences Updated')
         return redirect (url_for('dashboard', user=current_user.username))
 
+    profile = mongo.db.users.find_one(query)
     preferences = mongo.db.preferences.find_one(query)
     pref_list = get_prefs()
     langs_values = []
     artists_values = []
     genres_values = []
+    form_data = { 'twitter_handle' : '', 'blogger_handle' : ''}
+    try:
+        form_data ['twitter_handle'] = profile['twitter_handle']
+        form_data ['blogger_handle'] = profile['blogger_handle']
+    
+    except Exception as e:
+        print(str(e))
+        pass
     if preferences:
         try:
             genres_values = preferences['genres']
@@ -138,8 +152,8 @@ def preferences():
                             pref_list = pref_list, 
                             genres_values = genres_values, 
                             langs_values =langs_values ,
-                            artists_values = artists_values)
-
+                            artists_values = artists_values,
+                            form_data = form_data)
 @login_required
 @app.route('/dashboard/<user>')
 def dashboard(user):
@@ -154,10 +168,15 @@ def dashboard(user):
                 if k == 'day' and v == '0':
                     cur_emotion = emotion
                     break
+    suggestions = get_suggestions(current_user.username)    
+    emoji = get_emoji()
+    mood_color = get_mood_colors()
+    payload = get_chart_data(emotions,mood_color)
     moods = cur_emotion
     if emotions:
         for k, v in moods.items():
             if type(v) is float:
+<<<<<<< HEAD
                 moods[k] = float(v) * 100 
     suggestions = get_suggestions(current_user.username)
     #print ( suggestions )
@@ -167,6 +186,9 @@ def dashboard(user):
     payload = get_chart_data(emotions,mood_color)
     #payload = json.dumps(payload)
    # print (payload)
+=======
+                moods[k] = float(v) * 100
+>>>>>>> 7f41e4e8402bf8714cc3433258c91b14d64a4246
     moods.pop('day', None)
     return render_template('dashboard.html', 
                             title = 'Moody | {}'.format(profile['first_name']), 
