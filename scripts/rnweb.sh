@@ -1,4 +1,4 @@
 #!/bin/bash
 
 cd web
-gunicorn app:app
+gunicorn app:app -k gevent
