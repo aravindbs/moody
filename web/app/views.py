@@ -173,6 +173,7 @@ def dashboard(user):
     mood_color = get_mood_colors()
     payload = get_chart_data(emotions,mood_color)
     moods = cur_emotion
+    payload = get_chart_data(emotions,mood_color)
     if emotions:
         for k, v in moods.items():
             if type(v) is float:

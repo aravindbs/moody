@@ -36,7 +36,7 @@ $ . venv/bin/activate
 ```
 $ pip install -r requirements.txt 
 ```
-4. Download the env file containing the requirent environment variables from [here](https://drive.google.com/file/d/18NHa9qQqnZXrhwduuJ6Pd6MeG8k9shKE/view?usp=sharing)
+4. Download the env file containing the required environment variables from [here](https://drive.google.com/file/d/18NHa9qQqnZXrhwduuJ6Pd6MeG8k9shKE/view?usp=sharing)
 5. Place a copy of the env file in the ```web``` and ```workers``` directories.
 
 6. Rename the env file in both the directories to ```.env``` 
@@ -52,9 +52,10 @@ $ python main.py
 $ cd workers
 $ python <WORKER>.py 
 ```
+## Architecture
 
-
+![Architecure](https://github.com/aravindbs/moody/blob/master/docs/architecture.png)
 
 ## Motivation 
 
-This project was carried out by students from R.V College of Engineering as a part of the IBM Hack Challenge. 
+This project was carried out by students from R.V College of Engineering as a part of the IBM Hack Challenge.
