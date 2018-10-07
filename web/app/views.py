@@ -158,7 +158,7 @@ def dashboard(user):
     if emotions:
         for k, v in moods.items():
             if type(v) is float:
-                moods[k] = float(v) * 100
+                moods[k] = float(v) * 100 
     suggestions = get_suggestions(current_user.username)
     #print ( suggestions )
     mood_color = get_mood_colors()

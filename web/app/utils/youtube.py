@@ -13,6 +13,17 @@ DEVELOPER_KEY = config['youtube']['YOUTUBE_KEY']
 YOUTUBE_API_SERVICE_NAME = 'youtube'
 YOUTUBE_API_VERSION = 'v3'
 
+def maximum(a, b, c): 
+  
+    if (a >= b) and (a >= b): 
+        largest = a 
+  
+    elif (b >= a) and (b >= a): 
+        largest = b 
+    else: 
+        largest = c 
+          
+    return largest 
 
 def youtube_search(user):
     	
@@ -46,6 +57,8 @@ def youtube_search(user):
 		anger = curr_emotion['anger']
 		joy = emotion['joy']
 
+		max = maximum(sadness, joy, anger)
+
 		suggest = {}
 		all_suggestions = []
 		print(user[0]['username']) 
@@ -54,39 +67,41 @@ def youtube_search(user):
 		for lang in langs: 
 			curr_langs = langs[user[0]['username']]
 		
-		if sadness > joy:
-			for lang in curr_langs: 
-				print(lang)
-				search_response = youtube.search().list(
-				q= lang + 'comedy',
-				part='id,snippet',
-				maxResults=3, 
-				type='video', 
-				videoEmbeddable='true'
-				).execute()
-
-				for search_result in search_response.get('items', []):
-					suggest['name'] = search_result['snippet']['title']
-					suggest['url'] = 'https://www.youtube.com/watch?v=' + search_result['id']['videoId']
-					all_suggestions.append(suggest)
-					suggest = {}
-					#print(json.dumps(all_suggestions, indent=2))
-		else: 
-			for keyword in keywords: 
-				search_response = youtube.search().list(
-					q= keyword,
+			if max == sadness:
+				for lang in curr_langs: 
+					search_response = youtube.search().list(
+					q= lang + 'comedy',
 					part='id,snippet',
 					maxResults=3, 
 					type='video', 
 					videoEmbeddable='true'
-				).execute()
+					).execute()
 
-				for search_result in search_response.get('items', []):
-					suggest['name'] = search_result['snippet']['title']
-					suggest['url'] = 'https://www.youtube.com/watch?v=' + search_result['id']['videoId']
-					all_suggestions.append(suggest)
-					suggest = {}
+			elif max == joy: 
+				for keyword in keywords: 
+					search_response = youtube.search().list(
+						q= keyword,
+						part='id,snippet',
+						maxResults=3, 
+						type='video', 
+						videoEmbeddable='true'
+					).execute()
+			
+			else: 
+				for keyword in keywords: 
+					search_response = youtube.search().list(
+						q= 'calming music',
+						part='id,snippet',
+						maxResults=3, 
+						type='video', 
+						videoEmbeddable='true'
+					).execute()
 
+			for search_result in search_response.get('items', []):
+				suggest['name'] = search_result['snippet']['title']
+				suggest['url'] = 'https://www.youtube.com/watch?v=' + search_result['id']['videoId']
+				all_suggestions.append(suggest)
+				suggest = {}
 
 		print(json.dumps(all_suggestions, indent=2))
 
