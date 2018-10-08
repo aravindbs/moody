@@ -1,4 +1,4 @@
 #!/bin/bash
 
 cd workers
-python tweet.py
+python spotify.py
