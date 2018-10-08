@@ -110,6 +110,6 @@ def spotify(users):
             pass 
 
 if __name__ == '__main__':
-    users = list(db.users.find({}))
     while(1): 
+        users = list(db.users.find({}))
         spotify(users)

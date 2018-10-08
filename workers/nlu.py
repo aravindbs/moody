@@ -78,9 +78,6 @@ def nlu(users):
                         #print(all_emotions)
             except: 
                 pass             
-=======
-=======
->>>>>>> tmp
         tweets = db.tweets.find_one({'username' : user['username']})
         #print(tweets)
         try:
@@ -127,17 +124,13 @@ def nlu(users):
         except Exception as e:
             print(e)   
             pass        
-<<<<<<< HEAD
->>>>>>> 038dfd69eb19922a68b6e63cebd4a89d2f42f050
-=======
->>>>>>> tmp
         query = { 'screen_name' : user['twitter_handle']}
         update = { 'username' : user['username'] , 'screen_name' : user['twitter_handle'] , 'emotions' : all_emotions, 'keywords' : db_keywords }
         db.emotions.update(query, update, upsert=True)
 
 if __name__ == '__main__': 
     print("hey")
-    users = list(db.users.find({}))
     while(1):
+        users = list(db.users.find({}))
         nlu(users)
 

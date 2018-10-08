@@ -67,6 +67,6 @@ def get_tweets(users):
 
     
 if __name__ == '__main__': 
-    users = list(db.users.find({}))
     while(1):
+        users = list(db.users.find({}))
         get_tweets(users)

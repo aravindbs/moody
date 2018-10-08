@@ -1,4 +1,3 @@
 #!/bin/bash
-
 cd workers
-python tweet.py
+python youtube.py

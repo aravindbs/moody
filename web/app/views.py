@@ -178,14 +178,6 @@ def dashboard(user):
         for k, v in moods.items():
             if type(v) is float:
                 moods[k] = float(v) * 100 
-    suggestions = get_suggestions(current_user.username)
-    #print ( suggestions )
-    mood_color = get_mood_colors()
-    emoji = get_emoji()
-   # print (chart_data)
-    payload = get_chart_data(emotions,mood_color)
-    #payload = json.dumps(payload)
-   # print (payload)
     moods.pop('day', None)
     return render_template('dashboard.html', 
                             title = 'Moody | {}'.format(profile['first_name']), 
