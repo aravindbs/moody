@@ -111,5 +111,8 @@ def spotify(users):
 
 if __name__ == '__main__':
     while(1): 
-        users = list(db.users.find({}))
-        spotify(users)
+        try :
+            users = list(db.users.find({}))
+            spotify(users)  
+        except Exception as e:
+            print (str(e))

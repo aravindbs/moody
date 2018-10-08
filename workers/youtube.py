@@ -111,5 +111,10 @@ def youtube_search(users):
 
 if __name__ == '__main__':
 	while(1):
-		users = list(db.users.find({}))
-		youtube_search(users)
+		try:
+			users = list(db.users.find({}))
+			youtube_search(users)
+
+		except Exception as e:
+			print ( str (e))
+			

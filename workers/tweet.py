@@ -68,5 +68,9 @@ def get_tweets(users):
     
 if __name__ == '__main__': 
     while(1):
-        users = list(db.users.find({}))
-        get_tweets(users)
+        try:
+            users = list(db.users.find({}))
+            get_tweets(users)
+            
+        except Exception as e:
+            print( str(e))

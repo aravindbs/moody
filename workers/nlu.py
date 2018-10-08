@@ -131,6 +131,9 @@ def nlu(users):
 if __name__ == '__main__': 
     print("hey")
     while(1):
-        users = list(db.users.find({}))
-        nlu(users)
+        try:
+            users = list(db.users.find({}))
+            nlu(users)
+        except Exception as e:
+            print ( str(e))
 
