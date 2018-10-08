@@ -41,7 +41,7 @@ def get_artist_ids(artists):
     return artist_ids
 
 def spotify(user):
-    
+    print ( 'spotify ' + user[0]['username'])
     preferences = list(db.preferences.find({})) 
     artists = {}
     
@@ -53,12 +53,15 @@ def spotify(user):
     
     access_token = get_token()
     #for user in users: 
-    print(user[0]['username'])
+   # print(user[0]['username'])
     #user_genres = genres[user['username']]
     artist_ids = get_artist_ids(artists[user[0]['username']])
     #print(artist_ids)
     try:
         emotions = list(db.emotions.find({'username' : user[0]['username']}))
+
+        if emotions == None:
+	        return True
         emotions = emotions[0]
         emotions.pop('_id', None)
         emotions = emotions['emotions']
@@ -68,7 +71,7 @@ def spotify(user):
                 curr_emotion = emotion
                 break 
         if curr_emotion == None: 
-            pass
+            return True
      #   print(curr_emotion)
         
         sadness = curr_emotion['sadness']

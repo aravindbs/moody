@@ -25,11 +25,12 @@ api = API(auth, wait_on_rate_limit = True)
 
 def get_tweets(user):
    # print("hi")
+    print ( 'tweet ' + user[0]['username'])
     most_recent = list(db.most_recent_tweet.find({})) 
     #for user in users: 
     try: 
         screen_name = user[0]['twitter_handle']
-        print(screen_name)
+       # print(screen_name)
         if most_recent and len(most_recent) == 0: 
           #  print("none")
             result = list(api.user_timeline(screen_name=screen_name, count=10))

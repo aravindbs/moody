@@ -3,6 +3,10 @@ from app import mongo, APP_UTILS
 import os
 import datetime
 from app import config
+from app.utils.spotify import spotify
+from app.utils.tweet import get_tweets,api
+from app.utils.youtube import youtube_search
+from app.utils.nlu import nlu
 
 def get_chart_data (emotions, mood_color):
 
@@ -14,8 +18,11 @@ def get_chart_data (emotions, mood_color):
                        'fill' : False, 
                        'borderColor' : v }
     labels = []
+
+    sorted_emotions = sorted(emotions, key=lambda k: int(k['day'])) 
+  
     if emotions:
-        for emotion in emotions:
+        for emotion in sorted_emotions:
             try:
                 if emotion['day']:
                     labels.append(str(datetime.datetime.now().date() - datetime.timedelta(int(emotion['day']))))
@@ -26,11 +33,14 @@ def get_chart_data (emotions, mood_color):
             except:
                 pass
 
+    #print (json.dumps(emotions, indent=4))
 
     data = []
     for k, v in datasets.items():
+        v['data'].reverse()
         data.append(v)
-    data.reverse()
+
+    labels.reverse()
     payload = { 'labels' : labels, 'datasets': data }
     options = {}
     with open(os.path.join(APP_UTILS, 'chart_options.json'), 'r') as f:
@@ -75,3 +85,15 @@ def get_emoji ():
 def get_signup_form():
     with open (os.path.join(APP_UTILS, 'signup_form.json'), 'r') as f:
         return json.load(f)
+
+def init_user(_user):
+    ret = []
+    ret.append(get_tweets(_user)) 
+    ret.append(nlu(_user) )
+    ret.append(spotify(_user)) 
+    ret.append(youtube_search(_user))
+    
+    for val in ret:
+        if val is not True:
+            return str(val)
+    return True

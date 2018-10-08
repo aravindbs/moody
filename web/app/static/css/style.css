@@ -159,6 +159,7 @@ label, button{
     margin-bottom : 20px;
     padding: 0%;
     border-radius: 5px;
+    overflow: scroll;
 }
 .dash-body-video {
     height: 40%;

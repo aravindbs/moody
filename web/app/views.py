@@ -11,6 +11,7 @@ from app.utils.spotify import spotify
 from app.utils.tweet import get_tweets,api
 from app.utils.youtube import youtube_search
 from app.utils.nlu import nlu
+from .utils  import init_user
 
 GENRES = ['']
 
@@ -119,8 +120,10 @@ def preferences():
         print(type(user))
         _user = [user]
         
-        if get_tweets(_user) is not True or nlu(_user) is not True or spotify(_user) is not True or youtube_search(_user) is not True:  
-            flash("Please try again.")
+    #    if get_tweets(_user) is not True or nlu(_user) is not True or spotify(_user) is not True or youtube_search(_user) is not True:  
+        status = init_user(_user)
+        if status is not True:
+            flash("Please try again.\n" + str(status))
             return redirect (url_for('preferences', user=current_user.username)) 
         
         flash ('Preferences Updated')

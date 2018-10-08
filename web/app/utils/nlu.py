@@ -24,7 +24,7 @@ natural_language_understanding = NaturalLanguageUnderstandingV1(
   version=config['watson_nlu']['NLU_VERSION'])
 
 def nlu(user): 
-    print("nlu")
+    print ( 'nlu ' + user[0]['username'])
     #print (list(users) )
     today = datetime.datetime.now()
     #tweets = list(db.tweets.find({}))

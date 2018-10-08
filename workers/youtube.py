@@ -53,7 +53,7 @@ def youtube_search(users):
 			anger = curr_emotion['anger']
 			joy = emotion['joy']
 
-			max = maximum(saddness, anger, joy)
+			max = maximum(sadness, anger, joy)
 
 			suggest = {}
 			all_suggestions = []
@@ -116,5 +116,6 @@ if __name__ == '__main__':
 			youtube_search(users)
 
 		except Exception as e:
+			
 			print ( str (e))
 			

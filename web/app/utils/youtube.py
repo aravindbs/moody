@@ -26,6 +26,7 @@ def maximum(a, b, c):
     return largest 
 
 def youtube_search(user):
+	print ( 'youtube ' + user[0]['username'])
     	
 	youtube = build(YOUTUBE_API_SERVICE_NAME, YOUTUBE_API_VERSION, developerKey=DEVELOPER_KEY)
 	preferences = list(db.preferences.find({})) 
@@ -36,10 +37,13 @@ def youtube_search(user):
 		langs[pref['username']] = pref['langs']
 
 	#for user in users:
-	print (user[0]['username'])
+	#print (user[0]['username'])
 	emotions = list(db.emotions.find({'username' : user[0]['username']}))
 	try:
+		if emotions == None:
+			return True
 		emotions = emotions[0]
+		
 		emotions.pop('_id', None)
 		
 		keywords = emotions['keywords']
@@ -50,7 +54,7 @@ def youtube_search(user):
 				curr_emotion = emotion
 				break 
 		if curr_emotion == None: 
-			pass
+			return True
 		print(curr_emotion)
 		
 		sadness = curr_emotion['sadness']
@@ -107,9 +111,8 @@ def youtube_search(user):
 
 		query = { 'username' : user[0]['username'] }
 		update = { 'username' : user[0]['username'] , 'suggestion' : all_suggestions }
-		db.video_suggestions.update(query, update, upsert=True)   
-	except Exception as e: 
+		db.video_suggestions.update(query, update, upsert=True) 
+	except Exception as e:
 		return e 
-		pass
 
 	return True 

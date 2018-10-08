@@ -2,6 +2,8 @@
 
 **Moody** is your very own personal mental health assistant. Whether you are sad, angry or depressed, Moody will have a a music/video suggestion for you that will immediately brighten up your day. 
 
+Try it out [here](https://moodysok.eu-gb.mybluemix.net)
+
 ## [Video Demonstration](http://bit.do/MoodySOK)
 
 ## Documentation 
@@ -47,6 +49,8 @@ $ pip install -r requirements.txt
 $ cd web
 $ python main.py
  ```
+
+Open any browser window and type in [http://localhost:5000](http://localhost:5000)
 #### To start the workers.
 ```
 $ cd workers
